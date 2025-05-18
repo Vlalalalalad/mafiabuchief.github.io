@@ -84,6 +84,9 @@
 
         .card-front {
             transform: rotateY(180deg);
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-color: #ffffff;
         }
 
         .player-profile {
@@ -141,14 +144,14 @@
         }
     </style>
     <link rel="preload" href="img/CARD.png" as="image">
-    <link rel="preload" href="img/C LOVER.jpg" as="image">
-    <link rel="preload" href="img/C MAFIA.jpg" as="image">
+    <link rel="preload" href="img/C LOVER.png" as="image">
+    <link rel="preload" href="img/C MAFIA.png" as="image">
     <link rel="preload" href="img/C DON.png" as="image">
     <link rel="preload" href="img/C SHERIFF.png" as="image">
     <link rel="preload" href="img/C DOCTOR.png" as="image">
     <link rel="preload" href="img/C MANIAC.png" as="image">
-    <link rel="preload" href="img/C WITNESS.jpg" as="image">
-    <link rel="preload" href="img/C CIVILIAN.jpg" as="image">
+    <link rel="preload" href="img/C WITNESS.png" as="image">
+    <link rel="preload" href="img/C CIVILIAN.png" as="image">
     <link rel="preload" href="img/P LOVER.png" as="image">
     <link rel="preload" href="img/P MAFIA.png" as="image">
     <link rel="preload" href="img/P DON.png" as="image">
@@ -435,14 +438,14 @@
 
     <script>
         const rolesData = [
-            { name: 'Коханка', id: 'lover', profileImage: 'img/P LOVER.png', cardImage: 'img/C LOVER.jpg', team: 'civilian' },
-            { name: 'Мафія', id: 'mafia', profileImage: 'img/P MAFIA.png', cardImage: 'img/C MAFIA.jpg', team: 'mafia' },
+            { name: 'Коханка', id: 'lover', profileImage: 'img/P LOVER.png', cardImage: 'img/C LOVER.png', team: 'civilian' },
+            { name: 'Мафія', id: 'mafia', profileImage: 'img/P MAFIA.png', cardImage: 'img/C MAFIA.png', team: 'mafia' },
             { name: 'Дон', id: 'don', profileImage: 'img/P DON.png', cardImage: 'img/C DON.png', team: 'mafia' },
             { name: 'Шериф', id: 'sheriff', profileImage: 'img/P SHERIFF.png', cardImage: 'img/C SHERIFF.png', team: 'civilian' },
             { name: 'Лікар', id: 'doctor', profileImage: 'img/P DOCTOR.png', cardImage: 'img/C DOCTOR.png', team: 'civilian' },
             { name: 'Маніяк', id: 'maniac', profileImage: 'img/P MANIAC.png', cardImage: 'img/C MANIAC.png', team: 'solo' },
-            { name: 'Свідок', id: 'witness', profileImage: 'img/P WITNESS.png', cardImage: 'img/C WITNESS.jpg', team: 'civilian' },
-            { name: 'Мирний', id: 'civilian', profileImage: 'img/P CIVILIAN.png', cardImage: 'img/C CIVILIAN.jpg', team: 'civilian' }
+            { name: 'Свідок', id: 'witness', profileImage: 'img/P WITNESS.png', cardImage: 'img/C WITNESS.png', team: 'civilian' },
+            { name: 'Мирний', id: 'civilian', profileImage: 'img/P CIVILIAN.png', cardImage: 'img/C CIVILIAN.png', team: 'civilian' }
         ];
 
         let players = [];
@@ -598,6 +601,7 @@
 
         function renderIntroductionCard() {
             const player = players[currentPlayerIndex];
+            console.log(`Showing card for ${player.name}, role: ${player.role.name}, cardImage: ${player.role.cardImage}`);
             document.getElementById('currentPlayerName').textContent = player.name;
             document.querySelector('.card-front').style.backgroundImage = `url('${player.role.cardImage}')`;
         }
