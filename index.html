@@ -50,7 +50,7 @@
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            transition: transform 0.8s ease-in-out;
+            transition: transform 0.6s ease-in-out;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
@@ -66,11 +66,12 @@
             border-radius: 15px;
             background-size: cover;
             background-position: center;
-            transition: opacity 0.2s ease-in-out;
+            transition: opacity 0.3s ease-in-out;
         }
         .card-back {
             background-image: url('img/CARD.png');
             z-index: 2;
+            opacity: 1;
         }
         .card-front {
             transform: rotateY(180deg);
@@ -78,8 +79,12 @@
             background-repeat: no-repeat;
             background-color: #ffffff;
             z-index: 1;
+            opacity: 0;
         }
-        .card-front.hidden {
+        .card-front.visible {
+            opacity: 1;
+        }
+        .card-back.hidden {
             opacity: 0;
         }
         .player-profile {
@@ -275,7 +280,6 @@
                                 </button>
                             </div>
                         </div>
-                        <!-- Інші ролі аналогічно -->
                         <div class="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
                             <div class="flex items-center">
                                 <img src="img/P DON.png" class="w-8 h-8 rounded-full mr-3">
@@ -398,7 +402,7 @@
                         <div class="player-label text-lg font-medium">Гравець: <span id="currentPlayerName"></span></div>
                         <div class="card-container">
                             <div class="card">
-                                <div class="card-front hidden"></div>
+                                <div class="card-front"></div>
                                 <div class="card-back"></div>
                             </div>
                         </div>
@@ -678,26 +682,31 @@
             elements.continueIntroBtn.disabled = false;
             const card = document.querySelector('.card');
             const cardFront = document.querySelector('.card-front');
+            const cardBack = document.querySelector('.card-back');
             cardFront.style.backgroundImage = '';
-            cardFront.classList.add('hidden');
+            cardFront.classList.remove('visible');
+            cardBack.classList.remove('hidden');
             card.classList.remove('flipped');
         }
 
         function continueIntroduction() {
             const card = document.querySelector('.card');
             const cardFront = document.querySelector('.card-front');
+            const cardBack = document.querySelector('.card-back');
             const player = gameState.players[gameState.currentPlayerIndex];
 
             if (!card.classList.contains('flipped')) {
                 cardFront.style.backgroundImage = `url('${player.role.cardImage}')`;
                 setTimeout(() => {
-                    cardFront.classList.remove('hidden');
+                    cardBack.classList.add('hidden');
+                    cardFront.classList.add('visible');
                     card.classList.add('flipped');
                 }, 50);
                 elements.continueIntroBtn.textContent = 'Продовжити';
             } else {
-                cardFront.classList.add('hidden');
                 setTimeout(() => {
+                    cardFront.classList.remove('visible');
+                    cardBack.classList.remove('hidden');
                     card.classList.remove('flipped');
                 }, 50);
                 elements.continueIntroBtn.disabled = true;
@@ -849,7 +858,7 @@
                         gameState.nightResults.push(`${player.name} має алібі від Коханки і залишився в грі.`);
                     } else {
                         player.status = 'exiled';
-                        player.deathReason = 'ról';
+                        player.deathReason = 'Вигнаний';
                         player.deathTime = `День ${gameState.currentDay}`;
                         logGameEvent(`День ${gameState.currentDay}: ${player.name} вигнаний за голосуванням.`);
                         gameState.nightResults.push(`${player.name} вигнаний за голосуванням.`);
@@ -1217,4 +1226,4 @@
         });
     </script>
 </body>
-    </html>
+        </html>
