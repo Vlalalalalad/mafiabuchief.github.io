@@ -50,7 +50,7 @@
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            transition: transform 0.6s;
+            transition: transform 0.8s ease-in-out;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
@@ -66,18 +66,21 @@
             border-radius: 15px;
             background-size: cover;
             background-position: center;
+            transition: opacity 0.2s ease-in-out;
         }
         .card-back {
             background-image: url('img/CARD.png');
+            z-index: 2;
         }
         .card-front {
             transform: rotateY(180deg);
             background-size: contain;
             background-repeat: no-repeat;
             background-color: #ffffff;
+            z-index: 1;
         }
         .card-front.hidden {
-            visibility: hidden;
+            opacity: 0;
         }
         .player-profile {
             text-align: center;
@@ -180,7 +183,7 @@
     <link rel="preload" href="img/P CIVILIAN.png" as="image">
 </head>
 <body class="min-h-screen flex flex-col">
-    <!-- Модальне вікно підтвердження -->
+    <!-- Модальні вікна (без змін) -->
     <div id="confirmModal" class="modal">
         <div class="modal-content">
             <span class="close">×</span>
@@ -192,8 +195,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Модальне вікно для голосування -->
     <div id="votingModal" class="modal">
         <div class="modal-content">
             <span class="close">×</span>
@@ -206,8 +207,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Модальне вікно для результатів ночі -->
     <div id="nightResultsModal" class="modal">
         <div class="modal-content">
             <span class="close">×</span>
@@ -218,8 +217,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Модальне вікно для повторної дії Свідка -->
     <div id="witnessSecondActionModal" class="modal">
         <div class="modal-content">
             <span class="close">×</span>
@@ -240,7 +237,7 @@
         </header>
 
         <div id="app" class="transition-all duration-300">
-            <!-- Екран налаштування -->
+            <!-- Екран налаштування (без змін) -->
             <div id="setupScreen">
                 <h2 class="text-2xl font-semibold mb-6 text-center">Налаштування гри</h2>
                 <div class="bg-gray-800 rounded-lg p-6 mb-8 shadow-lg">
@@ -262,6 +259,7 @@
                         <i class="fas fa-mask mr-2"></i>Розподіл ролей
                     </h3>
                     <div id="rolesSelection" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Ролі (без змін) -->
                         <div class="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
                             <div class="flex items-center">
                                 <img src="img/P MAFIA.png" class="w-8 h-8 rounded-full mr-3">
@@ -277,6 +275,7 @@
                                 </button>
                             </div>
                         </div>
+                        <!-- Інші ролі аналогічно -->
                         <div class="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
                             <div class="flex items-center">
                                 <img src="img/P DON.png" class="w-8 h-8 rounded-full mr-3">
@@ -391,7 +390,7 @@
                 </div>
             </div>
 
-            <!-- Екран знайомства (Ніч 0) -->
+            <!-- Екран знайомства -->
             <div id="introductionScreen" class="hidden">
                 <h2 class="text-2xl font-semibold mb-6 text-center">Знайомство з ролями</h2>
                 <div class="bg-gray-800 rounded-lg p-6 mb-8 shadow-lg">
@@ -412,7 +411,7 @@
                 </div>
             </div>
 
-            <!-- Екран гри -->
+            <!-- Екран гри (без змін) -->
             <div id="gameScreen" class="hidden">
                 <h2 id="gamePhaseTitle" class="text-2xl font-semibold mb-6 text-center">
                     <i class="fas fa-sun mr-2"></i>День 1
@@ -679,7 +678,7 @@
             elements.continueIntroBtn.disabled = false;
             const card = document.querySelector('.card');
             const cardFront = document.querySelector('.card-front');
-            cardFront.style.backgroundImage = ''; // Очищаємо зображення
+            cardFront.style.backgroundImage = '';
             cardFront.classList.add('hidden');
             card.classList.remove('flipped');
         }
@@ -691,16 +690,21 @@
 
             if (!card.classList.contains('flipped')) {
                 cardFront.style.backgroundImage = `url('${player.role.cardImage}')`;
-                cardFront.classList.remove('hidden');
-                card.classList.add('flipped');
+                setTimeout(() => {
+                    cardFront.classList.remove('hidden');
+                    card.classList.add('flipped');
+                }, 50);
                 elements.continueIntroBtn.textContent = 'Продовжити';
             } else {
                 cardFront.classList.add('hidden');
-                card.classList.remove('flipped');
+                setTimeout(() => {
+                    card.classList.remove('flipped');
+                }, 50);
                 elements.continueIntroBtn.disabled = true;
 
                 const onTransitionEnd = () => {
                     card.removeEventListener('transitionend', onTransitionEnd);
+                    cardFront.style.backgroundImage = '';
                     gameState.currentPlayerIndex++;
                     renderIntroduction();
                     saveState();
@@ -845,7 +849,7 @@
                         gameState.nightResults.push(`${player.name} має алібі від Коханки і залишився в грі.`);
                     } else {
                         player.status = 'exiled';
-                        player.deathReason = 'Вигнаний';
+                        player.deathReason = 'ról';
                         player.deathTime = `День ${gameState.currentDay}`;
                         logGameEvent(`День ${gameState.currentDay}: ${player.name} вигнаний за голосуванням.`);
                         gameState.nightResults.push(`${player.name} вигнаний за голосуванням.`);
@@ -1213,4 +1217,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
