@@ -76,6 +76,9 @@
             background-repeat: no-repeat;
             background-color: #ffffff;
         }
+        .card-front.hidden {
+            visibility: hidden; /* Додаємо клас для приховування під час анімації */
+        }
         .player-profile {
             text-align: center;
             background-color: #374151;
@@ -674,8 +677,10 @@
             elements.currentPlayerName.textContent = player.name;
             elements.continueIntroBtn.textContent = 'Перевернути карту';
             elements.continueIntroBtn.disabled = false;
-            // Не змінюємо зображення одразу, чекаємо завершення анімації
-            document.querySelector('.card').classList.remove('flipped');
+            const card = document.querySelector('.card');
+            const cardFront = document.querySelector('.card-front');
+            cardFront.classList.add('hidden'); // Приховуємо передню сторону
+            card.classList.remove('flipped');
         }
 
         function continueIntroduction() {
@@ -684,19 +689,20 @@
             const player = gameState.players[gameState.currentPlayerIndex];
 
             if (!card.classList.contains('flipped')) {
-                // Перевертаємо картку для показу ролі
+                // Перед переворотом встановлюємо зображення ролі
+                cardFront.style.backgroundImage = `url('${player.role.cardImage}')`;
+                cardFront.classList.remove('hidden'); // Показуємо передню сторону
                 card.classList.add('flipped');
                 elements.continueIntroBtn.textContent = 'Продовжити';
             } else {
-                // Починаємо анімацію повернення картки
+                // Починаємо анімацію повернення
+                cardFront.classList.add('hidden'); // Приховуємо передню сторону
                 card.classList.remove('flipped');
                 elements.continueIntroBtn.disabled = true;
 
-                // Чекаємо завершення анімації перед зміною гравця
+                // Чекаємо завершення анімації
                 const onTransitionEnd = () => {
                     card.removeEventListener('transitionend', onTransitionEnd);
-                    // Змінюємо зображення лише після завершення анімації
-                    cardFront.style.backgroundImage = `url('${player.role.cardImage}')`;
                     gameState.currentPlayerIndex++;
                     renderIntroduction();
                     saveState();
@@ -1184,10 +1190,11 @@
                     updateRolesInputs();
                 } else if (gameState.currentPhase === 'introduction') {
                     renderIntroduction();
-                    // Встановлюємо початкове зображення для першої картки
                     const player = gameState.players[gameState.currentPlayerIndex];
-                    if (player) {
-                        document.querySelector('.card-front').style.backgroundImage = `url('${player.role.cardImage}')`;
+                    if (player && !document.querySelector('.card').classList.contains('flipped')) {
+                        const cardFront = document.querySelector('.card-front');
+                        cardFront.style.backgroundImage = `url('${player.role.cardImage}')`;
+                        cardFront.classList.remove('hidden');
                     }
                 } else {
                     if (gameState.isDay) {
@@ -1205,4 +1212,4 @@
         });
     </script>
 </body>
-                                    </html>
+</html>
