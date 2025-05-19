@@ -674,20 +674,34 @@
             elements.currentPlayerName.textContent = player.name;
             elements.continueIntroBtn.textContent = 'Перевернути карту';
             elements.continueIntroBtn.disabled = false;
-            const cardFront = document.querySelector('.card-front');
-            cardFront.style.backgroundImage = `url('${player.role.cardImage}')`;
+            // Не змінюємо зображення одразу, чекаємо завершення анімації
             document.querySelector('.card').classList.remove('flipped');
         }
 
         function continueIntroduction() {
             const card = document.querySelector('.card');
+            const cardFront = document.querySelector('.card-front');
+            const player = gameState.players[gameState.currentPlayerIndex];
+
             if (!card.classList.contains('flipped')) {
+                // Перевертаємо картку для показу ролі
                 card.classList.add('flipped');
                 elements.continueIntroBtn.textContent = 'Продовжити';
             } else {
-                gameState.currentPlayerIndex++;
-                renderIntroduction();
-                saveState();
+                // Починаємо анімацію повернення картки
+                card.classList.remove('flipped');
+                elements.continueIntroBtn.disabled = true;
+
+                // Чекаємо завершення анімації перед зміною гравця
+                const onTransitionEnd = () => {
+                    card.removeEventListener('transitionend', onTransitionEnd);
+                    // Змінюємо зображення лише після завершення анімації
+                    cardFront.style.backgroundImage = `url('${player.role.cardImage}')`;
+                    gameState.currentPlayerIndex++;
+                    renderIntroduction();
+                    saveState();
+                };
+                card.addEventListener('transitionend', onTransitionEnd);
             }
         }
 
@@ -720,12 +734,10 @@
             const resultsContainer = elements.nightResults;
             const confirmBtn = elements.nightResultsConfirmBtn;
 
-            // Збираємо всіх вбитих гравців
             const killedPlayers = gameState.players
                 .filter(p => p.status === 'dead' && p.deathTime === `Ніч ${gameState.currentNight}`)
                 .map(p => p.name);
 
-            // Формуємо текст результатів
             resultsContainer.innerHTML = killedPlayers.length > 0
                 ? `<p>Убиті: "${killedPlayers.join('", "')}"</p>`
                 : '<p>Нікого не вбили</p>';
@@ -902,9 +914,8 @@
         }
 
         function renderGameLog() {
-            // Відображаємо лог у зворотному порядку (нові внизу)
             elements.gameLog.innerHTML = gameState.gameLog.slice().reverse().map(event => `<p>${event}</p>`).join('');
-            elements.gameLog.scrollTop = elements.gameLog.scrollHeight; // Прокрутка вниз
+            elements.gameLog.scrollTop = elements.gameLog.scrollHeight;
         }
 
         function openWitnessSecondActionModal() {
@@ -1173,6 +1184,11 @@
                     updateRolesInputs();
                 } else if (gameState.currentPhase === 'introduction') {
                     renderIntroduction();
+                    // Встановлюємо початкове зображення для першої картки
+                    const player = gameState.players[gameState.currentPlayerIndex];
+                    if (player) {
+                        document.querySelector('.card-front').style.backgroundImage = `url('${player.role.cardImage}')`;
+                    }
                 } else {
                     if (gameState.isDay) {
                         startDayPhase();
