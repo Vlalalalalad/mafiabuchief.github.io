@@ -14,18 +14,18 @@
         }
         /* Стилі для анімації картки */
         .card-container {
-            perspective: 1200px; /* Глибокий 3D-ефект */
+            perspective: 1200px;
             width: 300px;
             height: 450px;
             margin: 20px auto;
-            transform: translateZ(0); /* Апаратне прискорення */
+            transform: translateZ(0);
         }
         .card {
             position: relative;
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out; /* Плавне обертання */
+            transition: transform 0.6s ease-in-out;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             will-change: transform;
@@ -38,11 +38,11 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden; /* Приховує зворотну сторону */
+            backface-visibility: hidden;
             border-radius: 15px;
             background-size: cover;
             background-position: center;
-            transition: opacity 0.6s ease-in-out; /* Синхронізована прозорість */
+            transition: opacity 0.6s ease-in-out;
             will-change: opacity;
         }
         .card-back {
@@ -140,13 +140,22 @@
             background: #718096;
         }
     </style>
-    <!-- Попереднє завантаження зображень -->
     <link rel="preload" href="img/CARD.png" as="image">
+    <link rel="preload" href="img/C LOVER.png" as="image">
     <link rel="preload" href="img/C MAFIA.png" as="image">
+    <link rel="preload" href="img/C DON.png" as="image">
     <link rel="preload" href="img/C SHERIFF.png" as="image">
+    <link rel="preload" href="img/C DOCTOR.png" as="image">
+    <link rel="preload" href="img/C MANIAC.png" as="image">
+    <link rel="preload" href="img/C WITNESS.png" as="image">
     <link rel="preload" href="img/C CIVILIAN.png" as="image">
+    <link rel="preload" href="img/P LOVER.png" as="image">
     <link rel="preload" href="img/P MAFIA.png" as="image">
+    <link rel="preload" href="img/P DON.png" as="image">
     <link rel="preload" href="img/P SHERIFF.png" as="image">
+    <link rel="preload" href="img/P DOCTOR.png" as="image">
+    <link rel="preload" href="img/P MANIAC.png" as="image">
+    <link rel="preload" href="img/P WITNESS.png" as="image">
     <link rel="preload" href="img/P CIVILIAN.png" as="image">
 </head>
 <body class="min-h-screen flex flex-col">
@@ -154,12 +163,12 @@
     <div id="votingModal" class="modal">
         <div class="modal-content">
             <span class="close">×</span>
-            <h3 class="text-xl font-bold mb-4">Голосування</h3>
-            <p class="mb-4">Оберіть гравця для вигнання:</p>
+            <h3 class="text-xl font-bold mb-4" data-i18n="votingTitle"></h3>
+            <p class="mb-4" data-i18n="votingDescription"></p>
             <div id="votingPlayers" class="grid grid-cols-2 gap-3 mb-4"></div>
             <div class="text-center space-x-4">
-                <button id="votingSkipBtn" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded">Пропустити</button>
-                <button id="votingConfirmBtn" class="px-4 py-2 bg-green-600 hover:bg-green-500 rounded">Підтвердити</button>
+                <button id="votingSkipBtn" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded" data-i18n="skip"></button>
+                <button id="votingConfirmBtn" class="px-4 py-2 bg-green-600 hover:bg-green-500 rounded" data-i18n="confirm"></button>
             </div>
         </div>
     </div>
@@ -168,22 +177,26 @@
     <div class="container mx-auto px-4 py-8 flex-grow">
         <header class="flex justify-center mb-8">
             <h1 class="text-3xl font-bold text-white">
-                <i class="fas fa-user-secret mr-2"></i>Мафія - Ведучий
+                <i class="fas fa-user-secret mr-2"></i><span data-i18n="gameTitle"></span>
             </h1>
         </header>
 
         <div id="app">
             <!-- Екран налаштування -->
             <div id="setupScreen">
-                <h2 class="text-2xl font-semibold mb-6 text-center">Налаштування гри</h2>
+                <h2 class="text-2xl font-semibold mb-6 text-center" data-i18n="setupTitle"></h2>
                 <div class="bg-gray-800 rounded-lg p-6 mb-8 shadow-lg">
-                    <h3 class="text-xl font-medium mb-4 flex justify-between">
-                        <span><i class="fas fa-users mr-2"></i>Гравці</span>
-                        <span id="playersCount" class="text-sm">0 гравців</span>
-                    </h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="text-xl font-medium flex items-center">
+                            <i class="fas fa-users mr-2"></i><span data-i18n="players"></span>
+                        </h3>
+                        <span id="playersCount" class="text-sm">0</span>
+                        <button id="changeLanguageBtn" class="px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white rounded-lg">
+                            <span id="languageLabel">UK</span>
+                        </button>
+                    </div>
                     <div class="flex mb-4">
-                        <input type="text" id="playerNameInput" placeholder="Ім'я гравця"
-                               class="flex-grow px-4 py-2 bg-gray-700 border border-gray-600 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
+                        <input type="text" id="playerNameInput" class="flex-grow px-4 py-2 bg-gray-700 border border-gray-600 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-purple-500">
                         <button id="addPlayerBtn" class="px-4 py-2 bg-purple-600 hover:bg-purple-500 text-white rounded-r-lg">
                             <i class="fas fa-plus"></i>
                         </button>
@@ -192,58 +205,14 @@
                 </div>
                 <div class="bg-gray-800 rounded-lg p-6 shadow-lg">
                     <h3 class="text-xl font-medium mb-4">
-                        <i class="fas fa-mask mr-2"></i>Ролі
+                        <i class="fas fa-mask mr-2"></i><span data-i18n="roles"></span>
                     </h3>
                     <div id="rolesSelection" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
-                            <div class="flex items-center">
-                                <img src="img/P MAFIA.png" class="w-8 h-8 rounded-full mr-3">
-                                <span>Мафія</span>
-                            </div>
-                            <div class="flex items-center">
-                                <button data-role="mafia" data-action="decrease" class="w-8 h-8 bg-gray-600 hover:bg-gray-500 rounded-l-lg flex items-center justify-center">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                                <span id="mafiaCount" class="px-4">0</span>
-                                <button data-role="mafia" data-action="increase" class="w-8 h-8 bg-gray-600 hover:bg-gray-500 rounded-r-lg flex items-center justify-center">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
-                            <div class="flex items-center">
-                                <img src="img/P SHERIFF.png" class="w-8 h-8 rounded-full mr-3">
-                                <span>Шериф</span>
-                            </div>
-                            <div class="flex items-center">
-                                <button data-role="sheriff" data-action="decrease" class="w-8 h-8 bg-gray-600 hover:bg-gray-500 rounded-l-lg flex items-center justify-center">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                                <span id="sheriffCount" class="px-4">0</span>
-                                <button data-role="sheriff" data-action="increase" class="w-8 h-8 bg-gray-600 hover:bg-gray-500 rounded-r-lg flex items-center justify-center">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
-                            <div class="flex items-center">
-                                <img src="img/P CIVILIAN.png" class="w-8 h-8 rounded-full mr-3">
-                                <span>Мирний</span>
-                            </div>
-                            <div class="flex items-center">
-                                <button data-role="civilian" data-action="decrease" class="w-8 h-8 bg-gray-600 hover:bg-gray-500 rounded-l-lg flex items-center justify-center">
-                                    <i class="fas fa-minus"></i>
-                                </button>
-                                <span id="civilianCount" class="px-4">0</span>
-                                <button data-role="civilian" data-action="increase" class="w-8 h-8 bg-gray-600 hover:bg-gray-500 rounded-r-lg flex items-center justify-center">
-                                    <i class="fas fa-plus"></i>
-                                </button>
-                            </div>
-                        </div>
+                        <!-- Ролі динамічно додаються в JS -->
                     </div>
                     <div class="mt-6 text-center">
                         <button id="startGameBtn" class="px-6 py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-lg disabled:opacity-50 disabled:cursor-not-allowed">
-                            <i class="fas fa-play mr-2"></i>Почати гру
+                            <i class="fas fa-play mr-2"></i><span data-i18n="startGame"></span>
                         </button>
                     </div>
                 </div>
@@ -251,10 +220,10 @@
 
             <!-- Екран знайомства -->
             <div id="introductionScreen" class="hidden">
-                <h2 class="text-2xl font-semibold mb-6 text-center">Знайомство з ролями</h2>
+                <h2 class="text-2xl font-semibold mb-6 text-center" data-i18n="introductionTitle"></h2>
                 <div class="bg-gray-800 rounded-lg p-6 mb-8 shadow-lg">
                     <div class="text-center mb-6">
-                        <div class="text-lg font-medium">Гравець: <span id="currentPlayerName"></span></div>
+                        <div class="text-lg font-medium" data-i18n="player"></div>
                         <div class="card-container">
                             <div class="card">
                                 <div class="card-front"></div>
@@ -263,9 +232,7 @@
                         </div>
                     </div>
                     <div class="text-center">
-                        <button id="continueIntroBtn" class="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg">
-                            Перевернути карту
-                        </button>
+                        <button id="continueIntroBtn" class="px-6 py-3 bg-purple-600 hover:bg-purple-500 text-white font-bold rounded-lg" data-i18n="flipCard"></button>
                     </div>
                 </div>
             </div>
@@ -273,17 +240,17 @@
             <!-- Екран гри -->
             <div id="gameScreen" class="hidden">
                 <h2 id="gamePhaseTitle" class="text-2xl font-semibold mb-6 text-center">
-                    <i class="fas fa-sun mr-2"></i>День 1
+                    <i class="fas fa-sun mr-2"></i><span data-i18n="day"></span> 1
                 </h2>
                 <div class="mb-6 flex justify-center">
                     <button id="nextPhaseBtn" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg">
-                        <span id="btnPhaseText">Місто засинає</span>
+                        <span id="btnPhaseText" data-i18n="citySleeps"></span>
                         <i class="fas fa-moon ml-2" id="btnPhaseIcon"></i>
                     </button>
                 </div>
                 <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
                     <h3 class="text-xl font-medium mb-4 flex justify-between">
-                        <span id="actionTitle"><i class="fas fa-heartbeat mr-2"></i>Живі гравці</span>
+                        <span id="actionTitle"><i class="fas fa-heartbeat mr-2"></i><span data-i18n="alivePlayers"></span></span>
                         <span id="aliveCount" class="text-sm"></span>
                     </h3>
                     <p id="actionDescription" class="mb-4"></p>
@@ -291,20 +258,20 @@
                 </div>
                 <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
                     <h3 class="text-xl font-medium mb-4">
-                        <i class="fas fa-scroll mr-2"></i>Лог подій
+                        <i class="fas fa-scroll mr-2"></i><span data-i18n="gameLog"></span>
                     </h3>
                     <div id="gameLog" class="bg-gray-900 p-4 rounded-lg h-64 overflow-y-auto scrollbar-custom"></div>
                 </div>
                 <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
                     <h3 class="text-xl font-medium mb-4">
-                        <i class="fas fa-skull mr-2"></i>Мертві гравці
+                        <i class="fas fa-skull mr-2"></i><span data-i18n="deadPlayers"></span>
                         <span id="deadCount" class="text-sm ml-2"></span>
                     </h3>
                     <div id="deadPlayers" class="grid grid-cols-2 sm:grid-cols-3 gap-4"></div>
                 </div>
                 <div class="text-center">
                     <button id="endGameBtn" class="px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg">
-                        <i class="fas fa-power-off mr-2"></i>Завершити гру
+                        <i class="fas fa-power-off mr-2"></i><span data-i18n="endGame"></span>
                     </button>
                 </div>
             </div>
@@ -312,24 +279,100 @@
     </div>
 
     <script>
+        // Переклади
+        const translations = {
+            uk: {
+                gameTitle: 'Мафія - Ведучий',
+                setupTitle: 'Налаштування гри',
+                players: 'Гравці',
+                roles: 'Ролі',
+                startGame: 'Почати гру',
+                introductionTitle: 'Знайомство з ролями',
+                player: 'Гравець: <span id="currentPlayerName"></span>',
+                flipCard: 'Перевернути карту',
+                continue: 'Продовжити',
+                day: 'День',
+                citySleeps: 'Місто засинає',
+                cityWakes: 'Місто прокидається',
+                alivePlayers: 'Живі гравці',
+                gameLog: 'Лог подій',
+                deadPlayers: 'Мертві гравці',
+                endGame: 'Завершити гру',
+                votingTitle: 'Голосування',
+                votingDescription: 'Оберіть гравця для вигнання:',
+                skip: 'Пропустити',
+                confirm: 'Підтвердити',
+                selectPlayer: 'Оберіть гравця!',
+                dayDiscussion: 'Гравці обговорюють і висувають кандидатів на голосування. Клікайте на гравців, щоб обрати кандидатів.',
+                mafiaAction: 'Оберіть гравця для вбивства або натисніть "Місто прокидається" для пропуску.',
+                lover: 'Коханка',
+                mafia: 'Мафія',
+                don: 'Дон',
+                sheriff: 'Шериф',
+                doctor: 'Лікар',
+                maniac: 'Маніяк',
+                witness: 'Свідок',
+                civilian: 'Мирний'
+            },
+            ru: {
+                gameTitle: 'Мафия - Ведущий',
+                setupTitle: 'Настройка игры',
+                players: 'Игроки',
+                roles: 'Роли',
+                startGame: 'Начать игру',
+                introductionTitle: 'Знакомство с ролями',
+                player: 'Игрок: <span id="currentPlayerName"></span>',
+                flipCard: 'Перевернуть карту',
+                continue: 'Продолжить',
+                day: 'День',
+                citySleeps: 'Город засыпает',
+                cityWakes: 'Город просыпается',
+                alivePlayers: 'Живые игроки',
+                gameLog: 'Лог событий',
+                deadPlayers: 'Мертвые игроки',
+                endGame: 'Завершить игру',
+                votingTitle: 'Голосование',
+                votingDescription: 'Выберите игрока для изгнания:',
+                skip: 'Пропустить',
+                confirm: 'Подтвердить',
+                selectPlayer: 'Выберите игрока!',
+                dayDiscussion: 'Игроки обсуждают и выдвигают кандидатов на голосование. Кликайте на игроков, чтобы выбрать кандидатов.',
+                mafiaAction: 'Выберите игрока для убийства или нажмите "Город просыпается" для пропуска.',
+                lover: 'Любовница',
+                mafia: 'Мафия',
+                don: 'Дон',
+                sheriff: 'Шериф',
+                doctor: 'Доктор',
+                maniac: 'Маньяк',
+                witness: 'Свидетель',
+                civilian: 'Мирный'
+            }
+        };
+
         // Дані ролей
         const rolesData = [
-            { id: 'mafia', name: 'Мафія', profileImage: 'img/P MAFIA.png', cardImage: 'img/C MAFIA.png', team: 'mafia' },
-            { id: 'sheriff', name: 'Шериф', profileImage: 'img/P SHERIFF.png', cardImage: 'img/C SHERIFF.png', team: 'civilian' },
-            { id: 'civilian', name: 'Мирний', profileImage: 'img/P CIVILIAN.png', cardImage: 'img/C CIVILIAN.png', team: 'civilian' }
+            { id: 'lover', profileImage: 'img/P LOVER.png', cardImage: 'img/C LOVER.png', team: 'civilian' },
+            { id: 'mafia', profileImage: 'img/P MAFIA.png', cardImage: 'img/C MAFIA.png', team: 'mafia' },
+            { id: 'don', profileImage: 'img/P DON.png', cardImage: 'img/C DON.png', team: 'mafia' },
+            { id: 'sheriff', profileImage: 'img/P SHERIFF.png', cardImage: 'img/C SHERIFF.png', team: 'civilian' },
+            { id: 'doctor', profileImage: 'img/P DOCTOR.png', cardImage: 'img/C DOCTOR.png', team: 'civilian' },
+            { id: 'maniac', profileImage: 'img/P MANIAC.png', cardImage: 'img/C MANIAC.png', team: 'solo' },
+            { id: 'witness', profileImage: 'img/P WITNESS.png', cardImage: 'img/C WITNESS.png', team: 'civilian' },
+            { id: 'civilian', profileImage: 'img/P CIVILIAN.png', cardImage: 'img/C CIVILIAN.png', team: 'civilian' }
         ];
 
         // Стан гри
         const gameState = {
             phase: 'setup',
             players: [],
-            roles: { mafia: 0, sheriff: 0, civilian: 0 },
+            roles: { lover: 0, mafia: 0, don: 0, sheriff: 0, doctor: 0, maniac: 0, witness: 0, civilian: 0 },
             day: 1,
             isDay: true,
             voting: [],
             currentPlayerIndex: 0,
             selectedPlayer: null,
-            gameLog: []
+            gameLog: [],
+            currentLanguage: 'uk'
         };
 
         // Елементи DOM
@@ -357,6 +400,8 @@
             btnPhaseText: document.getElementById('btnPhaseText'),
             btnPhaseIcon: document.getElementById('btnPhaseIcon'),
             endGameBtn: document.getElementById('endGameBtn'),
+            changeLanguageBtn: document.getElementById('changeLanguageBtn'),
+            languageLabel: document.getElementById('languageLabel'),
             votingModal: document.getElementById('votingModal'),
             votingPlayers: document.getElementById('votingPlayers'),
             votingConfirmBtn: document.getElementById('votingConfirmBtn'),
@@ -374,6 +419,38 @@
             elements.votingConfirmBtn.addEventListener('click', confirmVoting);
             elements.votingSkipBtn.addEventListener('click', skipVoting);
             elements.votingModal.querySelector('.close').addEventListener('click', closeVotingModal);
+            elements.changeLanguageBtn.addEventListener('click', changeLanguage);
+        }
+
+        // Зміна мови
+        function changeLanguage() {
+            gameState.currentLanguage = gameState.currentLanguage === 'uk' ? 'ru' : 'uk';
+            elements.languageLabel.textContent = gameState.currentLanguage.toUpperCase();
+            updateLanguage();
+            saveState();
+        }
+
+        // Оновлення тексту інтерфейсу
+        function updateLanguage() {
+            document.querySelectorAll('[data-i18n]').forEach(element => {
+                const key = element.dataset.i18n;
+                let text = translations[gameState.currentLanguage][key] || '';
+                if (key === 'player') {
+                    const playerName = elements.currentPlayerName.textContent;
+                    text = text.replace('<span id="currentPlayerName"></span>', playerName);
+                } else if (key === 'day') {
+                    text = `${text} ${gameState.day}`;
+                }
+                element.innerHTML = text;
+            });
+            elements.playerNameInput.placeholder = translations[gameState.currentLanguage][gameState.currentLanguage === 'uk' ? 'player' : 'player'].split(':')[0];
+            renderRolesSelection();
+            renderPlayers();
+            if (gameState.phase === 'introduction') renderIntroduction();
+            if (gameState.phase === 'game') {
+                if (gameState.isDay) startDayPhase();
+                else startNightPhase();
+            }
         }
 
         // Додавання гравця
@@ -384,8 +461,9 @@
                 elements.playerNameInput.value = '';
                 renderPlayers();
                 updateStartGameButton();
+                saveState();
             } else {
-                alert('Введіть унікальне ім\'я гравця!');
+                alert(translations[gameState.currentLanguage].selectPlayer);
             }
         }
 
@@ -414,19 +492,40 @@
             elements.playersList.innerHTML = gameState.players.map((player, index) => `
                 <div class="player-card bg-gray-700 p-3 rounded-lg flex justify-between items-center">
                     <span>${player.name}</span>
-                    <button class="text-red-500 hover:text-red-400" onclick="gameState.players.splice(${index}, 1); renderPlayers(); updateStartGameButton();">
+                    <button class="text-red-500 hover:text-red-400" onclick="gameState.players.splice(${index}, 1); renderPlayers(); updateStartGameButton(); saveState();">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
             `).join('');
-            elements.playersCount.textContent = `${gameState.players.length} гравців`;
+            elements.playersCount.textContent = `${gameState.players.length} ${translations[gameState.currentLanguage][gameState.players.length === 1 ? 'player' : 'players'].split(':')[0].toLowerCase()}`;
+        }
+
+        // Відображення вибору ролей
+        function renderRolesSelection() {
+            elements.rolesSelection.innerHTML = rolesData.map(role => `
+                <div class="flex items-center justify-between bg-gray-700 p-3 rounded-lg">
+                    <div class="flex items-center">
+                        <img src="${role.profileImage}" class="w-8 h-8 rounded-full mr-3">
+                        <span>${translations[gameState.currentLanguage][role.id]}</span>
+                    </div>
+                    <div class="flex items-center">
+                        <button data-role="${role.id}" data-action="decrease" class="w-8 h-8 bg-gray-600 hover:bg-gray-500 rounded-l-lg flex items-center justify-center">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <span id="${role.id}Count" class="px-4">${gameState.roles[role.id]}</span>
+                        <button data-role="${role.id}" data-action="increase" class="w-8 h-8 bg-gray-600 hover:bg-gray-500 rounded-r-lg flex items-center justify-center">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
         }
 
         // Початок гри
         function startGame() {
             const totalRoles = Object.values(gameState.roles).reduce((sum, count) => sum + count, 0);
             if (totalRoles !== gameState.players.length) {
-                alert('Кількість ролей має відповідати кількості гравців!');
+                alert(translations[gameState.currentLanguage].selectPlayer);
                 return;
             }
             assignRoles();
@@ -434,6 +533,7 @@
             gameState.currentPlayerIndex = 0;
             switchScreen('introduction');
             renderIntroduction();
+            saveState();
         }
 
         // Розподіл ролей
@@ -441,10 +541,10 @@
             const rolesArray = [];
             Object.entries(gameState.roles).forEach(([role, count]) => {
                 for (let i = 0; i < count; i++) {
-                    rolesArray.push(rolesData.find(r => r.id === role));
+                    const roleData = rolesData.find(r => r.id === role);
+                    rolesArray.push({ ...roleData, name: translations[gameState.currentLanguage][role] });
                 }
             });
-            // Випадкове перемішування (алгоритм Фішера-Йетса)
             for (let i = rolesArray.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [rolesArray[i], rolesArray[j]] = [rolesArray[j], rolesArray[i]];
@@ -476,15 +576,16 @@
             }
             const player = gameState.players[gameState.currentPlayerIndex];
             elements.currentPlayerName.textContent = player.name;
-            elements.continueIntroBtn.textContent = 'Перевернути карту';
+            elements.continueIntroBtn.textContent = translations[gameState.currentLanguage].flipCard;
             elements.continueIntroBtn.disabled = false;
             const card = document.querySelector('.card');
             const cardFront = document.querySelector('.card-front');
             cardFront.style.backgroundImage = '';
             card.classList.remove('flipped');
+            updateLanguage();
         }
 
-        // Продовження знайомства (анімація картки)
+        // Продовження знайомства
         function continueIntroduction() {
             const card = document.querySelector('.card');
             const cardFront = document.querySelector('.card-front');
@@ -493,7 +594,7 @@
             if (!card.classList.contains('flipped')) {
                 cardFront.style.backgroundImage = `url('${player.role.cardImage}')`;
                 card.classList.add('flipped');
-                elements.continueIntroBtn.textContent = 'Продовжити';
+                elements.continueIntroBtn.textContent = translations[gameState.currentLanguage].continue;
             } else {
                 card.classList.remove('flipped');
                 elements.continueIntroBtn.disabled = true;
@@ -502,6 +603,7 @@
                     cardFront.style.backgroundImage = '';
                     gameState.currentPlayerIndex++;
                     renderIntroduction();
+                    saveState();
                 };
                 card.addEventListener('transitionend', onTransitionEnd);
             }
@@ -510,13 +612,13 @@
         // Початок денної фази
         function startDayPhase() {
             gameState.isDay = true;
-            elements.gamePhaseTitle.innerHTML = `<i class="fas fa-sun mr-2"></i>День ${gameState.day}`;
-            elements.btnPhaseText.textContent = 'Місто засинає';
+            elements.gamePhaseTitle.innerHTML = `<i class="fas fa-sun mr-2"></i>${translations[gameState.currentLanguage].day} ${gameState.day}`;
+            elements.btnPhaseText.textContent = translations[gameState.currentLanguage].citySleeps;
             elements.btnPhaseIcon.className = 'fas fa-moon ml-2';
             gameState.voting = [];
             gameState.selectedPlayer = null;
-            elements.actionTitle.innerHTML = `<i class="fas fa-sun mr-2"></i>Денне обговорення`;
-            elements.actionDescription.textContent = 'Гравці обговорюють і висувають кандидатів на голосування. Клікайте на гравців, щоб обрати кандидатів.';
+            elements.actionTitle.innerHTML = `<i class="fas fa-sun mr-2"></i>${translations[gameState.currentLanguage].dayDiscussion.split('.')[0]}`;
+            elements.actionDescription.textContent = translations[gameState.currentLanguage].dayDiscussion;
             renderPlayersStatus();
             renderGameLog();
             checkGameEnd();
@@ -530,19 +632,19 @@
                     data-name="${player.name}">
                     <img src="${player.role.profileImage}" alt="${player.role.name}">
                     <div class="text-center font-medium">${player.name}</div>
-                    <div class="text-center text-sm text-gray-400">${player.role.name}</div>
+                    <div class="text-center text-sm text-gray-400">${translations[gameState.currentLanguage][player.role.id]}</div>
                 </div>
             `).join('');
             elements.deadPlayers.innerHTML = gameState.players.filter(p => p.status === 'dead').map(player => `
                 <div class="player-profile dead-player">
                     <img src="${player.role.profileImage}" alt="${player.role.name}">
                     <div class="text-center font-medium">${player.name}</div>
-                    <div class="text-center text-sm text-gray-400">${player.role.name}</div>
+                    <div class="text-center text-sm text-gray-400">${translations[gameState.currentLanguage][player.role.id]}</div>
                     <div class="text-center text-xs text-gray-400">${player.deathReason}, ${player.deathTime}</div>
                 </div>
             `).join('');
-            elements.aliveCount.textContent = `${alivePlayers.length} гравців`;
-            elements.deadCount.textContent = `${gameState.players.filter(p => p.status === 'dead').length} гравців`;
+            elements.aliveCount.textContent = `${alivePlayers.length} ${translations[gameState.currentLanguage][alivePlayers.length === 1 ? 'player' : 'players'].split(':')[0].toLowerCase()}`;
+            elements.deadCount.textContent = `${gameState.players.filter(p => p.status === 'dead').length} ${translations[gameState.currentLanguage][gameState.players.filter(p => p.status === 'dead').length === 1 ? 'player' : 'players'].split(':')[0].toLowerCase()}`;
 
             elements.alivePlayers.querySelectorAll('.player-profile').forEach(profile => {
                 profile.addEventListener('click', () => {
@@ -572,7 +674,7 @@
                 <div class="player-card bg-gray-700 p-3 rounded-lg cursor-pointer" data-name="${name}">
                     <img src="${gameState.players.find(p => p.name === name).role.profileImage}" class="w-12 h-12 rounded-full mx-auto mb-2">
                     <div class="text-center font-medium">${name}</div>
-                    <div class="text-center text-xs text-gray-400">${gameState.players.find(p => p.name === name).role.name}</div>
+                    <div class="text-center text-xs text-gray-400">${translations[gameState.currentLanguage][gameState.players.find(p => p.name === name).role.id]}</div>
                 </div>
             `).join('');
             elements.votingModal.style.display = 'block';
@@ -592,14 +694,14 @@
         // Підтвердження голосування
         function confirmVoting(selectedPlayer) {
             if (!selectedPlayer) {
-                alert('Оберіть гравця!');
+                alert(translations[gameState.currentLanguage].selectPlayer);
                 return;
             }
             const player = gameState.players.find(p => p.name === selectedPlayer);
             player.status = 'dead';
-            player.deathReason = 'Вигнаний';
-            player.deathTime = `День ${gameState.day}`;
-            logGameEvent(`День ${gameState.day}: ${player.name} вигнаний за голосуванням.`);
+            player.deathReason = translations[gameState.currentLanguage].votingTitle;
+            player.deathTime = `${translations[gameState.currentLanguage].day} ${gameState.day}`;
+            logGameEvent(`${translations[gameState.currentLanguage].day} ${gameState.day}: ${player.name} ${translations[gameState.currentLanguage].votingTitle.toLowerCase()}.`);
             elements.votingModal.style.display = 'none';
             gameState.voting = [];
             renderPlayersStatus();
@@ -608,7 +710,7 @@
 
         // Пропуск голосування
         function skipVoting() {
-            logGameEvent(`День ${gameState.day}: Голосування пропущено, нікого не вигнано.`);
+            logGameEvent(`${translations[gameState.currentLanguage].day} ${gameState.day}: ${translations[gameState.currentLanguage].votingTitle} ${translations[gameState.currentLanguage].skip.toLowerCase()}.`);
             elements.votingModal.style.display = 'none';
             gameState.voting = [];
             renderPlayersStatus();
@@ -625,7 +727,7 @@
         function nextPhase() {
             if (gameState.isDay) {
                 gameState.isDay = false;
-                logGameEvent(`Почалася ніч ${gameState.day}.`);
+                logGameEvent(`${translations[gameState.currentLanguage].citySleeps}: ${translations[gameState.currentLanguage].day.toLowerCase()} ${gameState.day}.`);
                 gameState.selectedPlayer = null;
                 startNightPhase();
             } else {
@@ -633,24 +735,24 @@
                 if (target && gameState.players.some(p => p.role.id === 'mafia' && p.status === 'alive')) {
                     const player = gameState.players.find(p => p.name === target);
                     player.status = 'dead';
-                    player.deathReason = 'Вбитий (Мафія)';
-                    player.deathTime = `Ніч ${gameState.day}`;
-                    logGameEvent(`Ніч ${gameState.day}: ${player.name} був убитий Мафією.`);
+                    player.deathReason = translations[gameState.currentLanguage].mafia;
+                    player.deathTime = `${translations[gameState.currentLanguage].day} ${gameState.day}`;
+                    logGameEvent(`${translations[gameState.currentLanguage].day} ${gameState.day}: ${player.name} ${translations[gameState.currentLanguage].mafia.toLowerCase()}.`);
                 }
                 gameState.isDay = true;
                 gameState.day++;
-                logGameEvent(`Почався день ${gameState.day}.`);
+                logGameEvent(`${translations[gameState.currentLanguage].cityWakes}: ${translations[gameState.currentLanguage].day.toLowerCase()} ${gameState.day}.`);
                 startDayPhase();
             }
         }
 
         // Початок нічної фази
         function startNightPhase() {
-            elements.gamePhaseTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>Ніч ${gameState.day}`;
-            elements.btnPhaseText.textContent = 'Місто прокидається';
+            elements.gamePhaseTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>${translations[gameState.currentLanguage].day} ${gameState.day}`;
+            elements.btnPhaseText.textContent = translations[gameState.currentLanguage].cityWakes;
             elements.btnPhaseIcon.className = 'fas fa-sun ml-2';
-            elements.actionTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>Прокидається Мафія`;
-            elements.actionDescription.textContent = 'Оберіть гравця для вбивства або натисніть "Місто прокидається" для пропуску.';
+            elements.actionTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>${translations[gameState.currentLanguage].mafia}`;
+            elements.actionDescription.textContent = translations[gameState.currentLanguage].mafiaAction;
             renderPlayersStatus();
         }
 
@@ -661,12 +763,12 @@
             const civilianCount = alivePlayers.filter(p => p.role.team === 'civilian').length;
 
             if (mafiaCount === 0) {
-                logGameEvent('Мирні жителі перемогли!');
-                alert('Мирні жителі перемогли!');
+                logGameEvent(`${translations[gameState.currentLanguage].civilian} ${translations[gameState.currentLanguage].alivePlayers.toLowerCase()}!`);
+                alert(`${translations[gameState.currentLanguage].civilian} ${translations[gameState.currentLanguage].alivePlayers.toLowerCase()}!`);
                 endGame();
             } else if (mafiaCount >= civilianCount) {
-                logGameEvent('Мафія перемогла!');
-                alert('Мафія перемогла!');
+                logGameEvent(`${translations[gameState.currentLanguage].mafia} ${translations[gameState.currentLanguage].alivePlayers.toLowerCase()}!`);
+                alert(`${translations[gameState.currentLanguage].mafia} ${translations[gameState.currentLanguage].alivePlayers.toLowerCase()}!`);
                 endGame();
             }
         }
@@ -675,7 +777,7 @@
         function endGame() {
             gameState.phase = 'setup';
             gameState.players = gameState.players.map(p => ({ name: p.name, status: 'alive', role: null }));
-            gameState.roles = { mafia: 0, sheriff: 0, civilian: 0 };
+            gameState.roles = { lover: 0, mafia: 0, don: 0, sheriff: 0, doctor: 0, maniac: 0, witness: 0, civilian: 0 };
             gameState.day = 1;
             gameState.isDay = true;
             gameState.voting = [];
@@ -684,7 +786,10 @@
             gameState.gameLog = [];
             switchScreen('setup');
             renderPlayers();
+            renderRolesSelection();
             updateStartGameButton();
+            updateLanguage();
+            saveState();
         }
 
         // Логування подій
@@ -699,12 +804,40 @@
             elements.gameLog.scrollTop = elements.gameLog.scrollHeight;
         }
 
+        // Збереження стану
+        function saveState() {
+            localStorage.setItem('mafiaGameState', JSON.stringify(gameState));
+        }
+
+        // Завантаження стану
+        function loadState() {
+            const savedState = localStorage.getItem('mafiaGameState');
+            if (savedState) {
+                Object.assign(gameState, JSON.parse(savedState));
+                elements.languageLabel.textContent = gameState.currentLanguage.toUpperCase();
+                switchScreen(gameState.phase);
+                renderRolesSelection();
+                if (gameState.phase === 'setup') {
+                    renderPlayers();
+                    updateStartGameButton();
+                } else if (gameState.phase === 'introduction') {
+                    renderIntroduction();
+                } else {
+                    if (gameState.isDay) startDayPhase();
+                    else startNightPhase();
+                }
+                updateLanguage();
+            } else {
+                renderRolesSelection();
+                updateLanguage();
+            }
+        }
+
         // Ініціалізація
         document.addEventListener('DOMContentLoaded', () => {
             setupEventListeners();
-            renderPlayers();
-            updateStartGameButton();
+            loadState();
         });
     </script>
 </body>
-    </html>
+</html>
