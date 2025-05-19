@@ -414,18 +414,6 @@
                 <h2 id="gamePhaseTitle" class="text-2xl font-semibold mb-6 text-center">
                     <i class="fas fa-sun mr-2"></i>День 1
                 </h2>
-                <div id="currentAction" class="bg-gray-800 rounded-lg p-6 mb-8 shadow-lg">
-                    <div class="intro-step">
-                        <h3 class="text-xl font-medium mb-3 flex items-center justify-between">
-                            <span id="actionTitle" class="bg-gray-700 px-3 py-2 rounded-lg">
-                                <i class="fas fa-sun mr-2"></i>Денне обговорення
-                            </span>
-                            <span id="actionProgress" class="text-sm bg-gray-700 px-2 py-1 rounded"></span>
-                        </h3>
-                        <p id="actionDescription" class="mb-4">Гравці обговорюють і висувають кандидатів на голосування.</p>
-                        <div id="playersToSelect" class="players-to-select grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 mb-4"></div>
-                    </div>
-                </div>
                 <div class="mb-6 flex justify-center">
                     <button id="nextPhaseBtn" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-all transform hover:scale-105">
                         <span id="btnPhaseText">Місто засинає</span>
@@ -433,22 +421,27 @@
                     </button>
                 </div>
                 <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
-                    <h3 class="text-xl font-medium mb-4 flex items-center">
-                        <i class="fas fa-heartbeat mr-2"></i>Живі гравці <span id="aliveCount" class="text-sm font-normal ml-2">0 гравців</span>
+                    <h3 class="text-xl font-medium mb-4 flex items-center justify-between">
+                        <span id="actionTitle">
+                            <i class="fas fa-heartbeat mr-2"></i>Живі гравці
+                        </span>
+                        <span id="aliveCount" class="text-sm font-normal"></span>
+                        <span id="actionProgress" class="text-sm bg-gray-700 px-2 py-1 rounded"></span>
                     </h3>
+                    <p id="actionDescription" class="mb-4"></p>
                     <div id="alivePlayers" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+                </div>
+                <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
+                    <h3 class="text-xl font-medium mb-4 flex items-center">
+                        <i class="fas fa-scroll mr-2"></i>Лог подій
+                    </h3>
+                    <div id="gameLog" class="bg-gray-900 p-4 rounded-lg h-64 overflow-y-auto scrollbar-custom"></div>
                 </div>
                 <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
                     <h3 class="text-xl font-medium mb-4 flex items-center">
                         <i class="fas fa-skull mr-2"></i>Мертві та вигнані <span id="deadCount" class="text-sm font-normal ml-2">0 гравців</span>
                     </h3>
                     <div id="deadPlayers" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
-                </div>
-                <div class="bg-gray-800 rounded-lg p-6 mt-6 shadow-lg">
-                    <h3 class="text-xl font-medium mb-4 flex items-center">
-                        <i class="fas fa-scroll mr-2"></i>Лог подій
-                    </h3>
-                    <div id="gameLog" class="bg-gray-900 p-4 rounded-lg h-64 overflow-y-auto scrollbar-custom"></div>
                 </div>
                 <div class="mt-6 text-center">
                     <button id="endGameBtn" class="px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition-transform transform hover:scale-105">
@@ -527,7 +520,6 @@
             actionTitle: document.getElementById('actionTitle'),
             actionDescription: document.getElementById('actionDescription'),
             actionProgress: document.getElementById('actionProgress'),
-            playersToSelect: document.getElementById('playersToSelect'),
             nextPhaseBtn: document.getElementById('nextPhaseBtn'),
             btnPhaseText: document.getElementById('btnPhaseText'),
             btnPhaseIcon: document.getElementById('btnPhaseIcon'),
@@ -553,7 +545,6 @@
         };
 
         function setupEventListeners() {
-            // Додавання гравця
             elements.addPlayerBtn.addEventListener('click', () => {
                 const name = elements.playerNameInput.value.trim();
                 if (name && !gameState.players.some(p => p.name === name)) {
@@ -567,7 +558,6 @@
                 }
             });
 
-            // Керування ролями
             elements.rolesSelection.querySelectorAll('[data-role]').forEach(button => {
                 button.addEventListener('click', () => {
                     const role = button.dataset.role;
@@ -583,27 +573,17 @@
                 });
             });
 
-            // Початок гри
             elements.startGameBtn.addEventListener('click', startGame);
-
-            // Продовження знайомства
             elements.continueIntroBtn.addEventListener('click', continueIntroduction);
-
-            // Наступна фаза
             elements.nextPhaseBtn.addEventListener('click', nextPhase);
-
-            // Завершення гри
             elements.endGameBtn.addEventListener('click', () => {
                 elements.confirmModal.style.display = 'block';
             });
-
             elements.confirmCancel.addEventListener('click', () => {
                 elements.confirmModal.style.display = 'none';
             });
-
             elements.confirmEnd.addEventListener('click', endGame);
 
-            // Закриття модальних вікон
             document.querySelectorAll('.modal .close').forEach(closeBtn => {
                 closeBtn.addEventListener('click', () => {
                     closeBtn.closest('.modal').style.display = 'none';
@@ -719,7 +699,6 @@
             gameState.voting = [];
             gameState.selectedPlayer = null;
 
-            // Показати результати ночі, якщо це не перший день
             if (gameState.currentDay > 1) {
                 showNightResults();
             } else {
@@ -732,8 +711,8 @@
 
         function startDayDiscussion() {
             elements.actionTitle.innerHTML = `<i class="fas fa-sun mr-2"></i>Денне обговорення`;
-            elements.actionDescription.textContent = 'Гравці обговорюють і висувають кандидатів на голосування.';
-            renderPlayersToSelect();
+            elements.actionDescription.textContent = 'Гравці обговорюють і висувають кандидатів на голосування. Клікайте на гравців, щоб обрати кандидатів.';
+            renderPlayersStatus();
         }
 
         function showNightResults() {
@@ -741,16 +720,10 @@
             const resultsContainer = elements.nightResults;
             const confirmBtn = elements.nightResultsConfirmBtn;
 
-            // Фільтруємо лише події вбивств
-            const killEvents = gameState.nightResults.filter(result => 
-                result.includes('вбитий') || result.includes('вбита')
-            );
-
-            // Витягуємо імена вбитих
-            const killedPlayers = killEvents.map(event => {
-                const match = event.match(/:\s*([^.(]+?)\s*(?:був убитий|була вбита)/);
-                return match ? match[1].trim() : null;
-            }).filter(name => name);
+            // Збираємо всіх вбитих гравців
+            const killedPlayers = gameState.players
+                .filter(p => p.status === 'dead' && p.deathTime === `Ніч ${gameState.currentNight}`)
+                .map(p => p.name);
 
             // Формуємо текст результатів
             resultsContainer.innerHTML = killedPlayers.length > 0
@@ -774,33 +747,48 @@
             };
         }
 
-        function renderPlayersToSelect() {
+        function renderPlayersStatus() {
             const alivePlayers = gameState.players.filter(p => p.status === 'alive');
-            elements.playersToSelect.innerHTML = alivePlayers.map(player => `
-                <div class="player-card bg-gray-700 p-3 rounded-lg cursor-pointer hover:scale-105 
-                            ${gameState.voting.includes(player.name) ? 'selected-player' : ''}" 
-                            data-name="${player.name}">
-                    <div class="text-center">
-                        <img src="${player.role.profileImage}" class="w-12 h-12 rounded-full mx-auto mb-2">
-                        <div class="font-medium">${player.name}</div>
-                        <div class="text-xs text-gray-400">${player.role.name}</div>
-                    </div>
+            elements.alivePlayers.innerHTML = alivePlayers.map(player => `
+                <div class="player-profile ${gameState.voting.includes(player.name) || gameState.selectedPlayer === player.name ? 'selected-player' : ''}" 
+                    data-name="${player.name}">
+                    <img src="${player.role.profileImage}" alt="${player.role.name}">
+                    <div class="name">${player.name}</div>
+                    <div class="role">${player.role.name}</div>
                 </div>
             `).join('');
-            elements.actionProgress.textContent = `${gameState.voting.length}/${alivePlayers.length}`;
+            elements.deadPlayers.innerHTML = gameState.players.filter(p => p.status !== 'alive').map(player => `
+                <div class="player-profile dead-player">
+                    <img src="${player.role.profileImage}" alt="${player.role.name}">
+                    <div class="name">${player.name}</div>
+                    <div class="role">${player.role.name}</div>
+                    <div class="status">${player.deathReason}, ${player.deathTime}</div>
+                </div>
+            `).join('');
+            elements.aliveCount.textContent = `${alivePlayers.length} ${declinePlayers(alivePlayers.length)}`;
+            elements.deadCount.textContent = `${gameState.players.filter(p => p.status !== 'alive').length} ${declinePlayers(gameState.players.filter(p => p.status !== 'alive').length)}`;
+            elements.actionProgress.textContent = gameState.isDay ? `${gameState.voting.length}/${alivePlayers.length}` : '';
 
-            elements.playersToSelect.querySelectorAll('.player-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const name = card.dataset.name;
-                    if (gameState.voting.includes(name)) {
-                        gameState.voting = gameState.voting.filter(n => n !== name);
+            elements.alivePlayers.querySelectorAll('.player-profile').forEach(profile => {
+                profile.addEventListener('click', () => {
+                    const name = profile.dataset.name;
+                    if (gameState.isDay) {
+                        if (gameState.voting.includes(name)) {
+                            gameState.voting = gameState.voting.filter(n => n !== name);
+                        } else {
+                            gameState.voting.push(name);
+                        }
+                        if (gameState.voting.length >= 2) {
+                            openVotingModal();
+                        }
                     } else {
-                        gameState.voting.push(name);
+                        const currentRole = getCurrentNightRole();
+                        const validTargets = getValidTargets(currentRole);
+                        if (validTargets.some(p => p.name === name)) {
+                            gameState.selectedPlayer = gameState.selectedPlayer === name ? null : name;
+                        }
                     }
-                    renderPlayersToSelect();
-                    if (gameState.voting.length >= 2) {
-                        openVotingModal();
-                    }
+                    renderPlayersStatus();
                     saveState();
                 });
             });
@@ -848,7 +836,6 @@
                     }
                     votingModal.style.display = 'none';
                     gameState.voting = [];
-                    renderPlayersToSelect();
                     renderPlayersStatus();
                     checkGameEnd();
                     saveState();
@@ -862,7 +849,6 @@
                 gameState.nightResults.push(`Голосування пропущено, нікого не вигнано.`);
                 votingModal.style.display = 'none';
                 gameState.voting = [];
-                renderPlayersToSelect();
                 renderPlayersStatus();
                 saveState();
             };
@@ -870,47 +856,9 @@
             votingModal.querySelector('.close').onclick = () => {
                 votingModal.style.display = 'none';
                 gameState.voting = [];
-                renderPlayersToSelect();
+                renderPlayersStatus();
                 saveState();
             };
-        }
-
-        function renderPlayersStatus() {
-            const alivePlayers = gameState.players.filter(p => p.status === 'alive');
-            elements.alivePlayers.innerHTML = alivePlayers.map(player => `
-                <div class="player-profile ${gameState.selectedPlayer === player.name ? 'selected-player' : ''}" data-name="${player.name}">
-                    <img src="${player.role.profileImage}" alt="${player.role.name}">
-                    <div class="name">${player.name}</div>
-                    <div class="role">${player.role.name}</div>
-                </div>
-            `).join('');
-            elements.deadPlayers.innerHTML = gameState.players.filter(p => p.status !== 'alive').map(player => `
-                <div class="player-profile dead-player">
-                    <img src="${player.role.profileImage}" alt="${player.role.name}">
-                    <div class="name">${player.name}</div>
-                    <div class="role">${player.role.name}</div>
-                    <div class="status">${player.deathReason}, ${player.deathTime}</div>
-                </div>
-            `).join('');
-            elements.aliveCount.textContent = `${alivePlayers.length} ${declinePlayers(alivePlayers.length)}`;
-            elements.deadCount.textContent = `${gameState.players.filter(p => p.status !== 'alive').length} ${declinePlayers(gameState.players.filter(p => p.status !== 'alive').length)}`;
-
-            // Додавання обробки кліків для вибору гравця в нічній фазі
-            elements.alivePlayers.querySelectorAll('.player-profile').forEach(profile => {
-                profile.addEventListener('click', () => {
-                    if (!gameState.isDay) {
-                        const name = profile.dataset.name;
-                        const currentRole = getCurrentNightRole();
-                        const validTargets = getValidTargets(currentRole);
-
-                        if (validTargets.some(p => p.name === name)) {
-                            gameState.selectedPlayer = gameState.selectedPlayer === name ? null : name;
-                            renderPlayersStatus();
-                            saveState();
-                        }
-                    }
-                });
-            });
         }
 
         function getCurrentNightRole() {
@@ -954,8 +902,9 @@
         }
 
         function renderGameLog() {
-            elements.gameLog.innerHTML = gameState.gameLog.map(event => `<p>${event}</p>`).join('');
-            elements.gameLog.scrollTop = 0; // Прокрутка до верху (нові події)
+            // Відображаємо лог у зворотному порядку (нові внизу)
+            elements.gameLog.innerHTML = gameState.gameLog.slice().reverse().map(event => `<p>${event}</p>`).join('');
+            elements.gameLog.scrollTop = elements.gameLog.scrollHeight; // Прокрутка вниз
         }
 
         function openWitnessSecondActionModal() {
@@ -1024,7 +973,7 @@
 
         function startNightPhase() {
             elements.gamePhaseTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>Ніч ${gameState.currentNight}`;
-            elements.playersToSelect.innerHTML = '';
+            elements.actionProgress.textContent = '';
 
             const nightActions = [
                 { role: 'lover', description: 'Прокидається Коханка', buttonText: 'Коханка засинає' },
@@ -1054,7 +1003,6 @@
                 : `Роль ${translations[gameState.currentLanguage][action.role]} мертва або відсутня. Натисніть "${action.buttonText}".`;
             elements.btnPhaseText.textContent = action.buttonText;
             elements.btnPhaseIcon.className = 'fas fa-moon ml-2';
-            elements.actionProgress.textContent = '';
 
             if (action.role === 'witnessSecond') {
                 if (gameState.players.some(p => p.role.id === 'witness' && p.status === 'alive')) {
@@ -1235,11 +1183,10 @@
             }
         }
 
-        // Ініціалізація
         document.addEventListener('DOMContentLoaded', () => {
             setupEventListeners();
             loadState();
         });
     </script>
 </body>
-</html>
+                                    </html>
