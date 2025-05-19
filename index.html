@@ -399,7 +399,7 @@
                         <div class="player-label text-lg font-medium">Гравець: <span id="currentPlayerName"></span></div>
                         <div class="card-container">
                             <div class="card">
-                                <div class="card-front"></div>
+                                <div class="card-front hidden"></div>
                                 <div class="card-back"></div>
                             </div>
                         </div>
@@ -419,7 +419,7 @@
                 </h2>
                 <div class="mb-6 flex justify-center">
                     <button id="nextPhaseBtn" class="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-lg transition-all transform hover:scale-105">
-                        <span id="btnPhaseText">Місто засина [засинає</span>
+                        <span id="btnPhaseText">Місто засинає</span>
                         <i class="fas fa-moon ml-2" id="btnPhaseIcon"></i>
                     </button>
                 </div>
@@ -679,6 +679,7 @@
             elements.continueIntroBtn.disabled = false;
             const card = document.querySelector('.card');
             const cardFront = document.querySelector('.card-front');
+            cardFront.style.backgroundImage = ''; // Очищаємо зображення
             cardFront.classList.add('hidden');
             card.classList.remove('flipped');
         }
@@ -1031,7 +1032,7 @@
             } else {
                 elements.actionTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>${action.description}`;
                 elements.actionDescription.textContent = rolePlayer
-                    ? `Оберіть гравця для дії (або натисніть "${action.buttonText}" без вибору).`
+                    ? `Оберіть гравця для дії.`
                     : `Роль ${translations[gameState.currentLanguage][action.role]} мертва або відсутня. Натисніть "${action.buttonText}".`;
                 elements.btnPhaseText.textContent = action.buttonText;
                 elements.btnPhaseIcon.className = 'fas fa-moon ml-2';
@@ -1196,12 +1197,6 @@
                     updateRolesInputs();
                 } else if (gameState.currentPhase === 'introduction') {
                     renderIntroduction();
-                    const player = gameState.players[gameState.currentPlayerIndex];
-                    if (player && !document.querySelector('.card').classList.contains('flipped')) {
-                        const cardFront = document.querySelector('.card-front');
-                        cardFront.style.backgroundImage = `url('${player.role.cardImage}')`;
-                        cardFront.classList.remove('hidden');
-                    }
                 } else {
                     if (gameState.isDay) {
                         startDayPhase();
@@ -1218,4 +1213,4 @@
         });
     </script>
 </body>
-                            </html>
+</html>
