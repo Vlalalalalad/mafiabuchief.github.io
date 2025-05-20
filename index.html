@@ -361,10 +361,8 @@
         function renderIntroduction() {
             if (gameState.currentPlayerIndex >= gameState.players.length) {
                 switchScreen('setup');
-                gameState.players = [];
-                gameState.roles = { lover: 0, mafia: 0, don: 0, sheriff: 0, doctor: 0, maniac: 0, witness: 0, civilian: 0 };
+                gameState.players = []; // Скидаємо тільки гравців, ролі залишаємо
                 updatePlayersCount();
-                updateRolesInputs();
                 return;
             }
             const player = gameState.players[gameState.currentPlayerIndex];
@@ -397,13 +395,6 @@
                 };
                 card.addEventListener('transitionend', onTransitionEnd);
             }
-        }
-
-        function updateRolesInputs() {
-            Object.keys(gameState.roles).forEach(role => {
-                const countSpan = document.getElementById(`${role}Count`);
-                countSpan.textContent = gameState.roles[role];
-            });
         }
 
         setupEventListeners();
