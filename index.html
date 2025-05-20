@@ -38,23 +38,23 @@
             background-color: #4a5568 !important;
         }
         .card-container {
-            perspective: 1200px; /* Збільшено для природного 3D-ефекту */
+            perspective: 1200px;
             width: 300px;
             height: 450px;
             margin: 20px auto;
             cursor: pointer;
             user-select: none;
-            transform: translateZ(0); /* Активує апаратне прискорення */
+            transform: translateZ(0);
         }
         .card {
             position: relative;
             width: 100%;
             height: 100%;
             transform-style: preserve-3d;
-            transition: transform 0.6s ease-in-out; /* Плавна анімація обертання */
+            transition: transform 0.6s ease-in-out;
             border-radius: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            will-change: transform; /* Оптимізація анімації */
+            will-change: transform;
         }
         .card.flipped {
             transform: rotateY(180deg);
@@ -64,30 +64,30 @@
             position: absolute;
             width: 100%;
             height: 100%;
-            backface-visibility: hidden; /* Приховує зворотну сторону */
+            backface-visibility: hidden;
             border-radius: 15px;
             background-size: cover;
             background-position: center;
-            transition: opacity 0.6s ease-in-out; /* Синхронізована з transform */
-            will-change: opacity; /* Оптимізація анімації */
+            transition: opacity 0.6s ease-in-out;
+            will-change: opacity;
         }
         .card-back {
             background-image: url('img/CARD.png');
-            opacity: 1; /* Видима за замовчуванням */
-            transform: translateZ(0); /* Чітке позиціонування */
+            opacity: 1;
+            transform: translateZ(0);
         }
         .card-front {
             background-size: contain;
             background-repeat: no-repeat;
             background-color: #ffffff;
-            opacity: 0; /* Прихована за замовчуванням */
-            transform: rotateY(180deg) translateZ(0); /* Повернута і на тій же площині */
+            opacity: 0;
+            transform: rotateY(180deg) translateZ(0);
         }
         .card.flipped .card-front {
-            opacity: 1; /* Показується при перевороті */
+            opacity: 1;
         }
         .card.flipped .card-back {
-            opacity: 0; /* Приховується при перевороті */
+            opacity: 0;
         }
         .player-profile {
             text-align: center;
@@ -101,8 +101,8 @@
             transform: scale(1.05);
         }
         .player-profile img {
-            width: 48px;
-            height: 48px;
+            width: 64px; /* Збільшено розмір аватарів */
+            height: 64px;
             border-radius: 9999px;
             object-fit: cover;
             margin-left: auto;
@@ -148,15 +148,18 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0,0,0,0.4);
+            display: flex; /* Центрування модального вікна */
+            justify-content: center;
+            align-items: center;
         }
         .modal-content {
             background-color: #2d3748;
-            margin: 10% auto;
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
             max-width: 500px;
             border-radius: 10px;
+            margin: 0; /* Прибрано фіксований margin */
         }
         .close {
             color: #aaa;
@@ -169,6 +172,13 @@
         .close:focus {
             color: #fff;
             text-decoration: none;
+        }
+        /* Адаптація сітки гравців */
+        #alivePlayers,
+        #deadPlayers {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr)); /* 3 стовпці для всіх розмірів екрану */
+            gap: 1rem;
         }
     </style>
     <link rel="preload" href="img/CARD.png" as="image">
@@ -436,7 +446,7 @@
                         <span id="actionProgress" class="text-sm bg-gray-700 px-2 py-1 rounded"></span>
                     </h3>
                     <p id="actionDescription" class="mb-4"></p>
-                    <div id="alivePlayers" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+                    <div id="alivePlayers" class="grid"></div>
                 </div>
                 <div class="bg-gray-800 rounded-lg p-6 mb-6 shadow-lg">
                     <h3 class="text-xl font-medium mb-4 flex items-center">
@@ -448,7 +458,7 @@
                     <h3 class="text-xl font-medium mb-4 flex items-center">
                         <i class="fas fa-skull mr-2"></i>Мертві та вигнані <span id="deadCount" class="text-sm font-normal ml-2">0 гравців</span>
                     </h3>
-                    <div id="deadPlayers" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"></div>
+                    <div id="deadPlayers" class="grid"></div>
                 </div>
                 <div class="mt-6 text-center">
                     <button id="endGameBtn" class="px-6 py-3 bg-red-600 hover:bg-red-500 text-white font-bold rounded-lg transition-transform transform hover:scale-105">
@@ -1214,4 +1224,4 @@
         });
     </script>
 </body>
-</html>
+                                                                               </html>
