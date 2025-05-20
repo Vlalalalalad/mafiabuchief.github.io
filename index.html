@@ -148,19 +148,15 @@
             height: 100%;
             overflow: auto;
             background-color: rgba(0,0,0,0.4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
         }
         .modal-content {
             background-color: #2d3748;
+            margin: 10% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 90%;
+            width: 80%;
             max-width: 500px;
             border-radius: 10px;
-            position: relative;
         }
         .close {
             color: #aaa;
@@ -235,17 +231,6 @@
             <p id="witnessSecondResult" class="mb-4"></p>
             <div class="text-center">
                 <button id="witnessSecondActionConfirmBtn" class="px-4 py-2 bg-green-600 hover:bg-green-500 rounded" data-i18n="witnessSleeps"></button>
-            </div>
-        </div>
-    </div>
-    <div id="sheriffActionModal" class="modal">
-        <div class="modal-content">
-            <span class="close">×</span>
-            <h3 class="text-xl font-bold mb-4" data-i18n="sheriffActionTitle"></h3>
-            <p class="mb-4" data-i18n="sheriffActionDescription"></p>
-            <div class="text-center space-x-4">
-                <button id="sheriffCheckBtn" class="px-4 py-2 bg-blue-600 hover:bg-blue-500 rounded" data-i18n="sheriffCheck"></button>
-                <button id="sheriffKillBtn" class="px-4 py-2 bg-red-600 hover:bg-red-500 rounded" data-i18n="sheriffKill"></button>
             </div>
         </div>
     </div>
@@ -418,10 +403,6 @@
                 nightResultsTitle: 'Результати ночі',
                 witnessSecondTitle: 'Повторна дія Свідка',
                 witnessSleeps: 'Свідок засинає',
-                sheriffActionTitle: 'Дія Шерифа',
-                sheriffActionDescription: 'Оберіть дію: перевірити гравця чи вбити.',
-                sheriffCheck: 'Перевірити',
-                sheriffKill: 'Вбити',
                 selectVote: 'Оберіть гравця для дії!',
                 playerNamePlaceholder: 'Ім\'я гравця',
                 playerOne: 'гравець',
@@ -452,7 +433,6 @@
                 blockedByLover: 'Заблоковано Коханкою',
                 killedByMafia: 'Вбитий (Мафія)',
                 killedByManiac: 'Вбитий (Маніяк)',
-                killedBySheriff: 'Вбитий (Шериф)',
                 killedWithLover: 'Вбита (Коханка)',
                 exiled: 'Вигнаний',
                 loverAlibi: 'має алібі від Коханки і залишається в грі',
@@ -460,13 +440,7 @@
                 civiliansWin: 'Мирні жителі перемогли!',
                 mafiaWins: 'Мафія перемогла!',
                 maniacWins: 'Маніяк переміг!',
-                footer: 'Гра "Мафія" © 2025 | Система для ведучого',
-                notMafia: 'Не мафія',
-                notSheriff: 'Не шериф',
-                nobody: 'ніхто',
-                deadOrMissing: 'мертва або відсутня',
-                role: 'Роль',
-                action: 'Дія'
+                footer: 'Гра "Мафія" © 2025 | Система для ведучого'
             },
             ru: {
                 gameTitle: 'Мафия - Ведущий',
@@ -498,10 +472,6 @@
                 nightResultsTitle: 'Результаты ночи',
                 witnessSecondTitle: 'Повторное действие Свидетеля',
                 witnessSleeps: 'Свидетель засыпает',
-                sheriffActionTitle: 'Действие Шерифа',
-                sheriffActionDescription: 'Выберите действие: проверить игрока или убить.',
-                sheriffCheck: 'Проверить',
-                sheriffKill: 'Убить',
                 selectVote: 'Выберите игрока для действия!',
                 playerNamePlaceholder: 'Имя игрока',
                 playerOne: 'игрок',
@@ -532,7 +502,6 @@
                 blockedByLover: 'Заблокировано Любовницей',
                 killedByMafia: 'Убит (Мафия)',
                 killedByManiac: 'Убит (Маньяк)',
-                killedBySheriff: 'Убит (Шериф)',
                 killedWithLover: 'Убита (Любовница)',
                 exiled: 'Изгнан',
                 loverAlibi: 'имеет алиби от Любовницы и остается в игре',
@@ -540,13 +509,7 @@
                 civiliansWin: 'Мирные жители победили!',
                 mafiaWins: 'Мафия победила!',
                 maniacWins: 'Маньяк победил!',
-                footer: 'Игра "Мафия" © 2025 | Система для ведущего',
-                notMafia: 'Не мафия',
-                notSheriff: 'Не шериф',
-                nobody: 'никто',
-                deadOrMissing: 'мертва или отсутствует',
-                role: 'Роль',
-                action: 'Действие'
+                footer: 'Игра "Мафия" © 2025 | Система для ведущего'
             }
         };
 
@@ -589,23 +552,9 @@
             witnessSecondActionModal: document.getElementById('witnessSecondActionModal'),
             witnessSecondResult: document.getElementById('witnessSecondResult'),
             witnessSecondActionConfirmBtn: document.getElementById('witnessSecondActionConfirmBtn'),
-            sheriffActionModal: document.getElementById('sheriffActionModal'),
-            sheriffCheckBtn: document.getElementById('sheriffCheckBtn'),
-            sheriffKillBtn: document.getElementById('sheriffKillBtn'),
             changeLanguageBtn: document.getElementById('changeLanguageBtn'),
             languageLabel: document.getElementById('languageLabel')
         };
-
-        const nightActions = [
-            { role: 'lover', description: translations[gameState.currentLanguage].loverAction, buttonText: translations[gameState.currentLanguage].loverSleeps },
-            { role: 'witness', description: translations[gameState.currentLanguage].witnessAction, buttonText: translations[gameState.currentLanguage].witnessSleeps },
-            { role: 'mafia', description: translations[gameState.currentLanguage].mafiaAction, buttonText: translations[gameState.currentLanguage].mafiaSleeps },
-            { role: 'don', description: translations[gameState.currentLanguage].donAction, buttonText: translations[gameState.currentLanguage].donSleeps },
-            { role: 'sheriff', description: translations[gameState.currentLanguage].sheriffAction, buttonText: translations[gameState.currentLanguage].sheriffSleeps },
-            { role: 'doctor', description: translations[gameState.currentLanguage].doctorAction, buttonText: translations[gameState.currentLanguage].doctorSleeps },
-            { role: 'maniac', description: translations[gameState.currentLanguage].maniacAction, buttonText: translations[gameState.currentLanguage].maniacSleeps },
-            { role: 'witnessSecond', description: translations[gameState.currentLanguage].witnessSecondAction, buttonText: translations[gameState.currentLanguage].witnessSleeps }
-        ];
 
         function setupEventListeners() {
             elements.addPlayerBtn.addEventListener('click', addPlayer);
@@ -689,18 +638,6 @@
             `).join('');
             elements.playersCount.textContent = `${gameState.players.length} ${declinePlayers(gameState.players.length)}`;
             updateStartGameButton();
-        }
-
-        function declinePlayers(count) {
-            if (gameState.currentLanguage === 'uk') {
-                if (count % 10 === 1 && count % 100 !== 11) return translations.uk.playerOne;
-                if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) return translations.uk.playerFew;
-                return translations.uk.playerMany;
-            } else {
-                if (count % 10 === 1 && count % 100 !== 11) return translations.ru.playerOne;
-                if ([2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100)) return translations.ru.playerFew;
-                return translations.ru.playerMany;
-            }
         }
 
         function renderRolesSelection() {
@@ -862,8 +799,12 @@
             const resultsContainer = elements.nightResults;
             const confirmBtn = elements.nightResultsConfirmBtn;
 
-            resultsContainer.innerHTML = gameState.nightResults.length > 0
-                ? gameState.nightResults.map(result => `<p>${result}</p>`).join('')
+            const killedPlayers = gameState.players
+                .filter(p => p.status === 'dead' && p.deathTime === `${translations[gameState.currentLanguage].night} ${gameState.currentNight}`)
+                .map(p => p.name);
+
+            resultsContainer.innerHTML = killedPlayers.length > 0
+                ? `<p>${translations[gameState.currentLanguage].killedByMafia}: "${killedPlayers.join('", "')}"</p>`
                 : `<p>${translations[gameState.currentLanguage].votingSkipped.split(',')[0]}.</p>`;
 
             modal.style.display = 'block';
@@ -922,7 +863,6 @@
                         const validTargets = getValidTargets(currentRole);
                         if (validTargets.some(p => p.name === name)) {
                             gameState.selectedPlayer = gameState.selectedPlayer === name ? null : name;
-                            gameState.actions[currentRole === 'witnessSecond' ? 'witness' : currentRole] = gameState.selectedPlayer;
                         }
                     }
                     renderPlayersStatus();
@@ -998,39 +938,17 @@
             };
         }
 
-        function startNightPhase() {
-            gameState.isDay = false;
-            gameState.currentNight++;
-            gameState.currentRoleIndex = 0;
-            gameState.actions = {};
-            gameState.selectedPlayer = null;
-            proceedToNextNightAction();
-        }
-
-        function proceedToNextNightAction() {
-            const currentRole = getCurrentNightRole();
-            if (!currentRole) {
-                gameState.currentDay++;
-                gameState.isDay = true;
-                startDayPhase();
-                return;
-            }
-
-            if (currentRole === 'sheriff') {
-                openSheriffActionModal();
-            } else if (currentRole === 'witnessSecond') {
-                openWitnessSecondActionModal();
-            } else {
-                const action = nightActions.find(a => a.role === currentRole);
-                elements.actionTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>${action.description}`;
-                elements.actionDescription.textContent = translations[gameState.currentLanguage].votingDescription.split(':')[0] + '.';
-                elements.btnPhaseText.textContent = action.buttonText;
-                elements.btnPhaseIcon.className = 'fas fa-moon ml-2';
-                renderPlayersStatus();
-            }
-        }
-
         function getCurrentNightRole() {
+            const nightActions = [
+                { role: 'lover', description: translations[gameState.currentLanguage].loverAction, buttonText: translations[gameState.currentLanguage].loverSleeps },
+                { role: 'witness', description: translations[gameState.currentLanguage].witnessAction, buttonText: translations[gameState.currentLanguage].witnessSleeps },
+                { role: 'mafia', description: translations[gameState.currentLanguage].mafiaAction, buttonText: translations[gameState.currentLanguage].mafiaSleeps },
+                { role: 'don', description: translations[gameState.currentLanguage].donAction, buttonText: translations[gameState.currentLanguage].donSleeps },
+                { role: 'sheriff', description: translations[gameState.currentLanguage].sheriffAction, buttonText: translations[gameState.currentLanguage].sheriffSleeps },
+                { role: 'doctor', description: translations[gameState.currentLanguage].doctorAction, buttonText: translations[gameState.currentLanguage].doctorSleeps },
+                { role: 'maniac', description: translations[gameState.currentLanguage].maniacAction, buttonText: translations[gameState.currentLanguage].maniacSleeps },
+                { role: 'witnessSecond', description: translations[gameState.currentLanguage].witnessSecondAction, buttonText: translations[gameState.currentLanguage].witnessSleeps }
+            ];
             return nightActions[gameState.currentRoleIndex]?.role;
         }
 
@@ -1038,7 +956,7 @@
             const alivePlayers = gameState.players.filter(p => p.status === 'alive');
             if (role === 'lover') {
                 return alivePlayers.filter(p => p.role.id !== 'lover' && p !== gameState.actions.loverLastNight);
-            } else if (role === 'witness' || role === 'witnessSecond') {
+            } else if (role === 'witness') {
                 return alivePlayers.filter(p => p.role.id !== 'witness' && p !== gameState.actions.witnessLastNight);
             } else if (role === 'mafia') {
                 return alivePlayers.filter(p => p.role.team !== 'mafia');
@@ -1054,29 +972,158 @@
             return alivePlayers;
         }
 
-        function processNightActions() {
-            const currentRole = getCurrentNightRole();
-            const loverTarget = gameState.actions.lover;
+        function logGameEvent(event) {
+            gameState.gameLog.push(event);
+            renderGameLog();
+            saveState();
+        }
+
+        function renderGameLog() {
+            elements.gameLog.innerHTML = gameState.gameLog.slice().reverse().map(event => `<p>${event}</p>`).join('');
+            elements.gameLog.scrollTop = elements.gameLog.scrollHeight;
+        }
+
+        function openWitnessSecondActionModal() {
+            const modal = elements.witnessSecondActionModal;
+            const result = elements.witnessSecondResult;
+            const confirmBtn = elements.witnessSecondActionConfirmBtn;
             const witnessTarget = gameState.actions.witness;
             const mafiaTarget = gameState.actions.mafia;
-            const donTarget = gameState.actions.don;
-            const sheriffTarget = gameState.actions.sheriff;
-            const doctorTarget = gameState.actions.doctor;
             const maniacTarget = gameState.actions.maniac;
 
-            if (currentRole === 'lover' && loverTarget) {
-                const target = gameState.players.find(p => p.name === loverTarget && p.status === 'alive');
-                if (target) {
-                    logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].lover} заблокувала ${target.name}.`);
-                    gameState.nightResults.push(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].lover} заблокувала ${target.name}.`);
-                    gameState.actions.loverLastNight = target;
-                }
+            if (witnessTarget && (witnessTarget === mafiaTarget || witnessTarget === maniacTarget)) {
+                const killer = witnessTarget === mafiaTarget ? translations[gameState.currentLanguage].mafia : translations[gameState.currentLanguage].maniac;
+                result.textContent = `${translations[gameState.currentLanguage].witness} побачив, що ${witnessTarget} був атакований (${killer}).`;
+                logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].witness} побачив, що ${witnessTarget} був атакований (${killer}).`);
+                gameState.nightResults.push(`${translations[gameState.currentLanguage].witness} побачив, що ${witnessTarget} був атакований (${killer}).`);
+            } else {
+                result.textContent = `${translations[gameState.currentLanguage].witness} спостерігав за ${witnessTarget || translations[gameState.currentLanguage].nobody}, але нічого не сталося.`;
+                logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].witness} спостерігав за ${witnessTarget || translations[gameState.currentLanguage].nobody}, але нічого не сталося.`);
+                gameState.nightResults.push(`${translations[gameState.currentLanguage].witness} спостерігав за ${witnessTarget || translations[gameState.currentLanguage].nobody}, але нічого не сталося.`);
             }
 
-            if (currentRole === 'witness' && witnessTarget) {
-                const target = gameState.players.find(p => p.name === witnessTarget && p.status === 'alive');
-                if (target) {
-                    gameState.actions.witnessLastNight = target;
+            modal.style.display = 'block';
+            elements.actionTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>${translations[gameState.currentLanguage].witnessSecondAction}`;
+            elements.btnPhaseText.textContent = translations[gameState.currentLanguage].witnessSleeps;
+            elements.btnPhaseIcon.className = 'fas fa-moon ml-2';
+
+            confirmBtn.onclick = () => {
+                modal.style.display = 'none';
+                gameState.currentRoleIndex++;
+                startNightPhase();
+                saveState();
+            };
+
+            modal.querySelector('.close').onclick = () => {
+                modal.style.display = 'none';
+                gameState.currentRoleIndex++;
+                startNightPhase();
+                saveState();
+            };
+        }
+
+        function nextPhase() {
+            if (gameState.isDay) {
+                gameState.isDay = false;
+                gameState.currentNight++;
+                logGameEvent(`${translations[gameState.currentLanguage].citySleeps}: ${translations[gameState.currentLanguage].night.toLowerCase()} ${gameState.currentNight}.`);
+                gameState.actions = {};
+                gameState.currentRoleIndex = 0;
+                gameState.selectedPlayer = null;
+                startNightPhase();
+            } else {
+                const currentRole = getCurrentNightRole();
+                const rolePlayer = currentRole !== 'witnessSecond' ? gameState.players.find(p => p.role.id === currentRole && p.status === 'alive') : null;
+                const isBlocked = rolePlayer && gameState.actions.lover === rolePlayer.name && ['mafia', 'don', 'sheriff', 'doctor', 'maniac'].includes(currentRole);
+
+                if (currentRole !== 'witnessSecond' && !isBlocked) {
+                    gameState.actions[currentRole] = gameState.selectedPlayer;
+                    if (currentRole === 'lover') gameState.actions.loverLastNight = gameState.selectedPlayer ? gameState.players.find(p => p.name === gameState.selectedPlayer) : null;
+                    if (currentRole === 'witness') gameState.actions.witnessLastNight = gameState.selectedPlayer ? gameState.players.find(p => p.name === gameState.selectedPlayer) : null;
+                    if (currentRole === 'doctor') gameState.actions.doctorLastNight = gameState.selectedPlayer ? gameState.players.find(p => p.name === gameState.selectedPlayer) : null;
+                    processNightActions();
+                }
+                gameState.currentRoleIndex++;
+                gameState.selectedPlayer = null;
+                startNightPhase();
+            }
+            saveState();
+        }
+
+        function startNightPhase() {
+            elements.gamePhaseTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>${translations[gameState.currentLanguage].night} ${gameState.currentNight}`;
+            elements.actionProgress.textContent = '';
+
+            const nightActions = [
+                { role: 'lover', description: translations[gameState.currentLanguage].loverAction, buttonText: translations[gameState.currentLanguage].loverSleeps },
+                { role: 'witness', description: translations[gameState.currentLanguage].witnessAction, buttonText: translations[gameState.currentLanguage].witnessSleeps },
+                { role: 'mafia', description: translations[gameState.currentLanguage].mafiaAction, buttonText: translations[gameState.currentLanguage].mafiaSleeps },
+                { role: 'don', description: translations[gameState.currentLanguage].donAction, buttonText: translations[gameState.currentLanguage].donSleeps },
+                { role: 'sheriff', description: translations[gameState.currentLanguage].sheriffAction, buttonText: translations[gameState.currentLanguage].sheriffSleeps },
+                { role: 'doctor', description: translations[gameState.currentLanguage].doctorAction, buttonText: translations[gameState.currentLanguage].doctorSleeps },
+                { role: 'maniac', description: translations[gameState.currentLanguage].maniacAction, buttonText: translations[gameState.currentLanguage].maniacSleeps },
+                { role: 'witnessSecond', description: translations[gameState.currentLanguage].witnessSecondAction, buttonText: translations[gameState.currentLanguage].witnessSleeps }
+            ];
+
+            if (gameState.currentRoleIndex >= nightActions.length) {
+                gameState.isDay = true;
+                gameState.currentDay++;
+                logGameEvent(`${translations[gameState.currentLanguage].cityWakes}: ${translations[gameState.currentLanguage].day.toLowerCase()} ${gameState.currentDay}.`);
+                startDayPhase();
+                return;
+            }
+
+            const action = nightActions[gameState.currentRoleIndex];
+            const rolePlayer = action.role !== 'witnessSecond' ? gameState.players.find(p => p.role.id === action.role && p.status === 'alive') : null;
+            const isBlocked = rolePlayer && gameState.actions.lover === rolePlayer.name && ['mafia', 'don', 'sheriff', 'doctor', 'maniac'].includes(action.role);
+
+            if (isBlocked) {
+                elements.actionTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>${action.description} (${translations[gameState.currentLanguage].blockedByLover})`;
+                elements.actionDescription.textContent = `${translations[gameState.currentLanguage].playerOne} із роллю ${translations[gameState.currentLanguage][action.role]} ${translations[gameState.currentLanguage].blockedByLover.toLowerCase()} і не може виконати дію цієї ночі. Натисніть "${action.buttonText}".`;
+                elements.btnPhaseText.textContent = action.buttonText;
+                elements.btnPhaseIcon.className = 'fas fa-moon ml-2';
+                renderPlayersStatus();
+            } else if (action.role === 'witnessSecond') {
+                if (gameState.players.some(p => p.role.id === 'witness' && p.status === 'alive')) {
+                    openWitnessSecondActionModal();
+                } else {
+                    gameState.currentRoleIndex++;
+                    startNightPhase();
+                }
+            } else {
+                elements.actionTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>${action.description}`;
+                elements.actionDescription.textContent = rolePlayer
+                    ? `${translations[gameState.currentLanguage].votingDescription.split(':')[0]}.`
+                    : `${translations[gameState.currentLanguage].role} ${translations[gameState.currentLanguage][action.role]} ${translations[gameState.currentLanguage].deadOrMissing}. Натисніть "${action.buttonText}".`;
+                elements.btnPhaseText.textContent = action.buttonText;
+                elements.btnPhaseIcon.className = 'fas fa-moon ml-2';
+                renderPlayersStatus();
+            }
+        }
+
+        function processNightActions() {
+            const currentRole = getCurrentNightRole();
+            if (!currentRole || currentRole === 'witnessSecond') return;
+
+            const blockedPlayer = gameState.actions.lover;
+            const mafiaTarget = gameState.actions.mafia;
+            const maniacTarget = gameState.actions.maniac;
+            const doctorTarget = gameState.actions.doctor;
+            const sheriffTarget = gameState.actions.sheriff;
+            const donTarget = gameState.actions.don;
+
+            if (currentRole === 'lover' && blockedPlayer) {
+                const blocked = gameState.players.find(p => p.name === blockedPlayer && p.status === 'alive');
+                if (blocked) {
+                    logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${blocked.name} ${translations[gameState.currentLanguage].blockedByLover.toLowerCase()}.`);
+                    gameState.nightResults.push(`${blocked.name} ${translations[gameState.currentLanguage].blockedByLover.toLowerCase()}.`);
+                    ['mafia', 'don', 'sheriff', 'doctor', 'maniac'].forEach(role => {
+                        if (gameState.actions[role] === blocked.name) {
+                            gameState.actions[role] = null;
+                            logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].action} ${translations[gameState.currentLanguage][role]} ${translations[gameState.currentLanguage].blockedByLover.toLowerCase()}.`);
+                            gameState.nightResults.push(`${translations[gameState.currentLanguage].action} ${translations[gameState.currentLanguage][role]} ${translations[gameState.currentLanguage].blockedByLover.toLowerCase()}.`);
+                        }
+                    });
                 }
             }
 
@@ -1104,55 +1151,6 @@
                 gameState.nightResults.push(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].doctor} врятував ${mafiaTarget} від ${translations[gameState.currentLanguage].mafia}.`);
             }
 
-            if (currentRole === 'don' && donTarget) {
-                const target = gameState.players.find(p => p.name === donTarget && p.status === 'alive');
-                if (target) {
-                    const isSheriff = target.role.id === 'sheriff';
-                    logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].don} перевірив ${target.name}: ${isSheriff ? translations[gameState.currentLanguage].sheriff : translations[gameState.currentLanguage].notSheriff}.`);
-                    gameState.nightResults.push(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].don} перевірив ${target.name}: ${isSheriff ? translations[gameState.currentLanguage].sheriff : translations[gameState.currentLanguage].notSheriff}.`);
-                }
-            }
-
-            if (currentRole === 'sheriff' && gameState.actions.sheriffAction) {
-                if (gameState.actions.sheriffAction === 'check' && sheriffTarget) {
-                    const target = gameState.players.find(p => p.name === sheriffTarget && p.status === 'alive');
-                    if (target) {
-                        const isMafia = target.role.team === 'mafia';
-                        logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].sheriff} перевірив ${target.name}: ${isMafia ? translations[gameState.currentLanguage].mafia : translations[gameState.currentLanguage].notMafia}.`);
-                        gameState.nightResults.push(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].sheriff} перевірив ${target.name}: ${isMafia ? translations[gameState.currentLanguage].mafia : translations[gameState.currentLanguage].notMafia}.`);
-                    }
-                } else if (gameState.actions.sheriffAction === 'kill' && sheriffTarget && sheriffTarget !== doctorTarget) {
-                    const target = gameState.players.find(p => p.name === sheriffTarget && p.status === 'alive');
-                    if (target) {
-                        if (target.role.id === 'lover') {
-                            const lover = gameState.players.find(p => p.role.id === 'lover' && p.status === 'alive');
-                            if (lover) {
-                                lover.status = 'dead';
-                                lover.deathReason = translations[gameState.currentLanguage].killedWithLover;
-                                lover.deathTime = `${translations[gameState.currentLanguage].night} ${gameState.currentNight}`;
-                                logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${lover.name} (${translations[gameState.currentLanguage].lover}) ${translations[gameState.currentLanguage].killedWithLover.toLowerCase()} разом із ${target.name}.`);
-                                gameState.nightResults.push(`${lover.name} (${translations[gameState.currentLanguage].lover}) ${translations[gameState.currentLanguage].killedWithLover.toLowerCase()} разом із ${target.name}.`);
-                            }
-                        }
-                        target.status = 'dead';
-                        target.deathReason = translations[gameState.currentLanguage].killedBySheriff;
-                        target.deathTime = `${translations[gameState.currentLanguage].night} ${gameState.currentNight}`;
-                        logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${target.name} ${translations[gameState.currentLanguage].killedBySheriff.toLowerCase()}.`);
-                        gameState.nightResults.push(`${target.name} ${translations[gameState.currentLanguage].killedBySheriff.toLowerCase()}.`);
-                    }
-                } else if (gameState.actions.sheriffAction === 'kill' && sheriffTarget && sheriffTarget === doctorTarget) {
-                    logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].doctor} врятував ${sheriffTarget} від ${translations[gameState.currentLanguage].sheriff}.`);
-                    gameState.nightResults.push(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].doctor} врятував ${sheriffTarget} від ${translations[gameState.currentLanguage].sheriff}.`);
-                }
-            }
-
-            if (currentRole === 'doctor' && doctorTarget) {
-                const target = gameState.players.find(p => p.name === doctorTarget && p.status === 'alive');
-                if (target) {
-                    gameState.actions.doctorLastNight = target;
-                }
-            }
-
             if (currentRole === 'maniac' && maniacTarget && maniacTarget !== doctorTarget) {
                 const target = gameState.players.find(p => p.name === maniacTarget && p.status === 'alive');
                 if (target) {
@@ -1176,132 +1174,41 @@
                 logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].doctor} врятував ${maniacTarget} від ${translations[gameState.currentLanguage].maniac}.`);
                 gameState.nightResults.push(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].doctor} врятував ${maniacTarget} від ${translations[gameState.currentLanguage].maniac}.`);
             }
-        }
 
-        function openWitnessSecondActionModal() {
-            const modal = elements.witnessSecondActionModal;
-            const result = elements.witnessSecondResult;
-            const confirmBtn = elements.witnessSecondActionConfirmBtn;
-            const witnessTarget = gameState.actions.witness;
-            const mafiaTarget = gameState.actions.mafia;
-            const maniacTarget = gameState.actions.maniac;
-            const sheriffTarget = gameState.actions.sheriffAction === 'kill' ? gameState.actions.sheriff : null;
-
-            if (witnessTarget && (witnessTarget === mafiaTarget || witnessTarget === maniacTarget || witnessTarget === sheriffTarget)) {
-                const killer = witnessTarget === mafiaTarget ? translations[gameState.currentLanguage].mafia :
-                              witnessTarget === maniacTarget ? translations[gameState.currentLanguage].maniac :
-                              translations[gameState.currentLanguage].sheriff;
-                result.textContent = `${translations[gameState.currentLanguage].witness} побачив, що ${witnessTarget} був атакований (${killer}).`;
-                logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].witness} побачив, що ${witnessTarget} був атакований (${killer}).`);
-                gameState.nightResults.push(`${translations[gameState.currentLanguage].witness} побачив, що ${witnessTarget} був атакований (${killer}).`);
-            } else {
-                result.textContent = `${translations[gameState.currentLanguage].witness} спостерігав за ${witnessTarget || translations[gameState.currentLanguage].nobody}, але нічого не сталося.`;
-                logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].witness} спостерігав за ${witnessTarget || translations[gameState.currentLanguage].nobody}, але нічого не сталося.`);
-                gameState.nightResults.push(`${translations[gameState.currentLanguage].witness} спостерігав за ${witnessTarget || translations[gameState.currentLanguage].nobody}, але нічого не сталося.`);
-            }
-
-            modal.style.display = 'block';
-            elements.actionTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>${translations[gameState.currentLanguage].witnessSecondAction}`;
-            elements.btnPhaseText.textContent = translations[gameState.currentLanguage].witnessSleeps;
-            elements.btnPhaseIcon.className = 'fas fa-moon ml-2';
-
-            confirmBtn.onclick = () => {
-                modal.style.display = 'none';
-                gameState.currentRoleIndex++;
-                proceedToNextNightAction();
-                saveState();
-            };
-
-            modal.querySelector('.close').onclick = () => {
-                modal.style.display = 'none';
-                gameState.currentRoleIndex++;
-                proceedToNextNightAction();
-                saveState();
-            };
-        }
-
-        function openSheriffActionModal() {
-            const modal = elements.sheriffActionModal;
-            const checkBtn = elements.sheriffCheckBtn;
-            const killBtn = elements.sheriffKillBtn;
-
-            modal.style.display = 'block';
-            elements.actionTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>${translations[gameState.currentLanguage].sheriffAction}`;
-            elements.actionDescription.textContent = translations[gameState.currentLanguage].sheriffActionDescription;
-            elements.btnPhaseText.textContent = translations[gameState.currentLanguage].sheriffSleeps;
-            elements.btnPhaseIcon.className = 'fas fa-moon ml-2';
-
-            checkBtn.onclick = () => {
-                modal.style.display = 'none';
-                gameState.actions.sheriffAction = 'check';
-                startSheriffPhase();
-                saveState();
-            };
-
-            killBtn.onclick = () => {
-                modal.style.display = 'none';
-                gameState.actions.sheriffAction = 'kill';
-                startSheriffPhase();
-                saveState();
-            };
-
-            modal.querySelector('.close').onclick = () => {
-                modal.style.display = 'none';
-                gameState.currentRoleIndex++;
-                proceedToNextNightAction();
-                saveState();
-            };
-        }
-
-        function startSheriffPhase() {
-            const action = nightActions.find(a => a.role === 'sheriff');
-            elements.actionTitle.innerHTML = `<i class="fas fa-moon mr-2"></i>${action.description}`;
-            elements.actionDescription.textContent = translations[gameState.currentLanguage].votingDescription.split(':')[0] + '.';
-            elements.btnPhaseText.textContent = action.buttonText;
-            elements.btnPhaseIcon.className = 'fas fa-moon ml-2';
-            renderPlayersStatus();
-        }
-
-        function nextPhase() {
-            if (gameState.isDay) {
-                startNightPhase();
-            } else {
-                const currentRole = getCurrentNightRole();
-                if (currentRole && currentRole !== 'sheriff' && currentRole !== 'witnessSecond') {
-                    processNightActions();
-                    gameState.currentRoleIndex++;
-                    proceedToNextNightAction();
+            if (currentRole === 'sheriff' && sheriffTarget) {
+                const target = gameState.players.find(p => p.name === sheriffTarget && p.status === 'alive');
+                if (target) {
+                    const isMafia = target.role.team === 'mafia';
+                    logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].sheriff} перевірив ${target.name}: ${isMafia ? translations[gameState.currentLanguage].mafia : translations[gameState.currentLanguage].notMafia}.`);
+                    gameState.nightResults.push(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].sheriff} перевірив ${target.name}: ${isMafia ? translations[gameState.currentLanguage].mafia : translations[gameState.currentLanguage].notMafia}.`);
                 }
             }
-            saveState();
-        }
 
-        function logGameEvent(event) {
-            gameState.gameLog.push(event);
-            renderGameLog();
-            saveState();
-        }
-
-        function renderGameLog() {
-            elements.gameLog.innerHTML = gameState.gameLog.slice().reverse().map(event => `<p>${event}</p>`).join('');
-            elements.gameLog.scrollTop = elements.gameLog.scrollHeight;
+            if (currentRole === 'don' && donTarget) {
+                const target = gameState.players.find(p => p.name === donTarget && p.status === 'alive');
+                if (target) {
+                    const isSheriff = target.role.id === 'sheriff';
+                    logGameEvent(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].don} перевірив ${target.name}: ${isSheriff ? translations[gameState.currentLanguage].sheriff : translations[gameState.currentLanguage].notSheriff}.`);
+                    gameState.nightResults.push(`${translations[gameState.currentLanguage].night} ${gameState.currentNight}: ${translations[gameState.currentLanguage].don} перевірив ${target.name}: ${isSheriff ? translations[gameState.currentLanguage].sheriff : translations[gameState.currentLanguage].notSheriff}.`);
+                }
+            }
         }
 
         function checkGameEnd() {
             const alivePlayers = gameState.players.filter(p => p.status === 'alive');
-            const mafiaAlive = alivePlayers.filter(p => p.role.team === 'mafia').length;
-            const civiliansAlive = alivePlayers.filter(p => p.role.team === 'civilian').length;
-            const maniacAlive = alivePlayers.filter(p => p.role.team === 'solo').length;
+            const mafiaCount = alivePlayers.filter(p => p.role.team === 'mafia').length;
+            const civilianCount = alivePlayers.filter(p => p.role.team === 'civilian').length;
+            const maniacCount = alivePlayers.filter(p => p.role.id === 'maniac').length;
 
-            if (mafiaAlive === 0 && maniacAlive === 0) {
+            if (mafiaCount === 0 && maniacCount === 0) {
                 logGameEvent(translations[gameState.currentLanguage].civiliansWin);
                 alert(translations[gameState.currentLanguage].civiliansWin);
                 endGame();
-            } else if (mafiaAlive >= civiliansAlive && maniacAlive === 0) {
+            } else if (mafiaCount >= civilianCount && maniacCount === 0) {
                 logGameEvent(translations[gameState.currentLanguage].mafiaWins);
                 alert(translations[gameState.currentLanguage].mafiaWins);
                 endGame();
-            } else if (maniacAlive > 0 && mafiaAlive === 0 && civiliansAlive <= 1) {
+            } else if (maniacCount === 1 && alivePlayers.length === 2 && mafiaCount === 0) {
                 logGameEvent(translations[gameState.currentLanguage].maniacWins);
                 alert(translations[gameState.currentLanguage].maniacWins);
                 endGame();
@@ -1309,9 +1216,11 @@
         }
 
         function endGame() {
+            gameState.savedPlayers = gameState.players.map(p => ({ name: p.name }));
+            gameState.savedRoles = { ...gameState.roles };
             gameState.currentPhase = 'setup';
-            gameState.players = [];
-            gameState.roles = { lover: 0, mafia: 0, don: 0, sheriff: 0, doctor: 0, maniac: 0, witness: 0, civilian: 0 };
+            gameState.players = gameState.savedPlayers.map(p => ({ ...p, status: 'alive', role: null }));
+            gameState.roles = { ...gameState.savedRoles };
             gameState.currentDay = 1;
             gameState.currentNight = 0;
             gameState.isDay = true;
@@ -1320,40 +1229,55 @@
             gameState.currentPlayerIndex = 0;
             gameState.currentRoleIndex = 0;
             gameState.gameLog = [];
+            gameState.selectedPlayer = null;
             gameState.nightResults = [];
             switchScreen('setup');
             renderPlayers();
             renderRolesSelection();
-            updateStartGameButton();
+            elements.confirmModal.style.display = 'none';
             saveState();
+            updateLanguage();
+        }
+
+        function declinePlayers(count) {
+            if (count === 1) return translations[gameState.currentLanguage].playerOne;
+            if (count >= 2 && count <= 4) return translations[gameState.currentLanguage].playerFew;
+            return translations[gameState.currentLanguage].playerMany;
         }
 
         function saveState() {
-            localStorage.setItem('gameState', JSON.stringify(gameState));
+            localStorage.setItem('mafiaGameState', JSON.stringify(gameState));
         }
 
         function loadState() {
-            const savedState = localStorage.getItem('gameState');
+            const savedState = localStorage.getItem('mafiaGameState');
             if (savedState) {
                 Object.assign(gameState, JSON.parse(savedState));
-                renderPlayers();
+                elements.languageLabel.textContent = gameState.currentLanguage.toUpperCase();
+                switchScreen(gameState.currentPhase);
+                if (gameState.currentPhase === 'setup') {
+                    renderPlayers();
+                    renderRolesSelection();
+                } else if (gameState.currentPhase === 'introduction') {
+                    renderIntroduction();
+                } else {
+                    if (gameState.isDay) {
+                        startDayPhase();
+                    } else {
+                        startNightPhase();
+                    }
+                }
+                updateLanguage();
+            } else {
                 renderRolesSelection();
                 updateLanguage();
-                if (gameState.currentPhase === 'introduction') {
-                    switchScreen('introduction');
-                    renderIntroduction();
-                } else if (gameState.currentPhase === 'game') {
-                    switchScreen('game');
-                    if (gameState.isDay) startDayPhase();
-                    else startNightPhase();
-                }
             }
         }
 
-        setupEventListeners();
-        loadState();
-        updateLanguage();
-        renderRolesSelection();
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+            loadState();
+        });
     </script>
 </body>
-    </html>
+</html>
